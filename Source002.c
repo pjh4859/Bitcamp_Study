@@ -72,7 +72,7 @@ int main()
 	int a = 1234;
 	float f = 3.14f;
 	char c = 'a';
-	char buf[] = "hellow";
+	char buf[] = "hellom";
 	char* p = "hellow";
 	int* k = &a;
 	*k = 10;
