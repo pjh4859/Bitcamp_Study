@@ -50,17 +50,22 @@ int main()
 }
 #endif
 
-#if 1
-void wow()
+#if 0
+int wow(int *i,int *j)
 {
-	int i = 5;
-	double j = 4.5;
-	double k = j + i;
+	int sum = *i + *j;
+
+	return sum;
 }
 int main()
 {
 	int i = 10;
-	wow();
+	int j=20;
+
+	int result;
+	
+	result =  wow(&i,&j);
+	printf("%d",result);
 
 	return 0;
 }
@@ -87,12 +92,8 @@ void foo()
 {
 	int a[2] = { 1,2 };
 	printf("foo called\n");
-	a[5] = a[4];
-	//a[2] = 3;
-	//a[3] = 4;
-	//a[4] = 0;
-	a[4] = goo;
-	//a[5] = 0;
+	a[5] = a[4];//ret main 이 a[4]에 있는거같은데 그걸 a[5]에 넣어줌.
+	a[4] = goo;//main return 위치가 운좋게 a[4] 에 있어서 성립됨. 
 }
 int main()
 {
@@ -105,10 +106,41 @@ int main()
 	foo();
 	j = i;
 	printf("main \n");
-	//__asm mov	esp,0 
-	__asm sub esp, 4
+	__asm sub esp, 4;
+	
 	return 0;
 }
+#endif
+#if 0
+void goo()
+{
+
+}
+void fun(int i,int j)
+{
+	printf("fun()\n");
+	__asm
+	{
+		mov ecx, dword ptr[ebp + 4]
+		mov epb, ecx
+	}
+	int a[2] = { 1,2 };
+	a[4] = goo;
+
+}
+
+int main()
+{
+	__asm
+	{
+		push ecx
+	}
+
+	fun(1, 2);
+	printf("main()\n");
+	return 0;
+}
+
 #endif
 //====================================================================
 #if 0
