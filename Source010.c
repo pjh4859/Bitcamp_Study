@@ -1,4 +1,7 @@
 #include <stdio.h>
+#include <stdlib.h>
+
+
 #if 0
 int add(int a, int b)
 {
@@ -296,3 +299,112 @@ int main()
 	return 0;
 }
 #endif
+
+
+#if 0
+int main()
+{
+	int i = 0, j = 0, num;
+	printf("Enter a number.");
+	scanf_s("%d", &num);
+
+	while (i < num*num)//내가바꾼점 1.(원래는 num)
+	{
+		while (j < num)
+		{
+			//printf("%5d",i*num+j+1); //이거도 됨. 위에건 안바꾸고.
+			printf("%5d",i);
+			j++;
+			i++;//2. 원래는 없음.
+		}
+		printf("\n");
+		j = 0;
+		//i++;//3. 주석처리함.
+	}
+	return 0;
+}
+#endif
+
+
+#if 0
+#define MAX 5
+int main()
+{
+#define MAX2 10
+	int i = 0, j = 0, num;
+	int a[MAX][MAX] = { 0 };
+	
+	for(i=0;i<MAX;i++)
+		for (j = 0; j < MAX; j++)
+		{
+			a[i][j] = i*MAX + j+1;
+		}
+	for (i = 0; i < MAX; i++)
+	{
+		for (j = 0; j < MAX; j++)
+		{
+			printf("%3d", a[i][j]);
+		}
+		printf("\n");
+	}
+		return 0;
+}
+#endif
+
+#if 0
+#define MAX 5
+int main()
+{
+#define MAX2 10
+	int i = 0, j = 0, num=0;
+	int a[MAX2][MAX2] = { 0 };
+
+	for (i = 0; i < MAX2; i++)
+		for (j = 0; j < i+1; j++)
+		{
+			a[i][j] = num+++1;
+		}
+	for (i = 0; i < MAX2; i++)
+	{
+		for (j = 0; j < i+1; j++)
+		{
+			printf("%3d", a[i][j]);
+		}
+		printf("\n");
+	}
+	return 0;
+}
+#endif
+
+#if 0
+#define MAX 5
+int main()
+{
+#define MAX2 10
+	int i = 0, j = 0, num = 0;
+	int a[MAX][MAX] = { 0 };
+
+	for (i = 0; i < MAX; i++)
+		for (j = 0; j < i+1; j++)
+		{
+			a[i][MAX-1-i+j] = num++ + 1;
+		}
+	for (i = 0; i < MAX; i++)
+	{
+		for (j = 0; j < MAX; j++)
+		{
+			if (a[i][j])
+			{
+				printf("%3d", a[i][j]);
+			}
+			else
+			{
+				printf("   ");
+			}
+		}
+		printf("\n");
+	}
+	return 0;
+}
+#endif
+
