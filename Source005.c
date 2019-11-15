@@ -143,7 +143,7 @@ int main()
 
 #endif
 
-#if 1
+#if 0
 int main()
 {
 	int i = 0, j = 0, cnt = 0;

@@ -1,6 +1,6 @@
-//#include <stdio.h>//#은 전처리기
 
 #if 0
+//#include <stdio.h>//#은 전처리기
 //#define SQUARE(x) x*x
 /*
 int printf(char * str)
@@ -63,7 +63,8 @@ int main()
 	return0;
 }
 #endif
-#if 1
+
+#if 0
 #include <stdio.h>
 
 

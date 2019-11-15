@@ -1,7 +1,6 @@
+#if 0
 #define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
-
-
 	/*
 	int main()
 {
@@ -101,7 +100,7 @@ void my_gets(char* str, int size)
 }
 
 */
-
+#endif
 #if 0
 int main()
 {
@@ -138,6 +137,7 @@ int main()
 }
 #endif
 
+#if 0
 #define PR printf
 
 int main()
@@ -319,3 +319,4 @@ int main()
 
 	return 0;
 }
+#endif

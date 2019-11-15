@@ -1,9 +1,9 @@
+#if 0
 #define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 
-#if 0
 int main()
 {
 	/*
@@ -390,7 +390,7 @@ int main()
 
 
 #endif
-
+#if 0
 int main()
 {
 	char* pary[4];
@@ -407,3 +407,4 @@ int main()
 	}
 	return 0;
 }
+#endif

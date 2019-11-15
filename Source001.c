@@ -1,6 +1,5 @@
+#if 0
 #include <stdio.h>
-
-
 int main(void)
 {
 	printf("hellow\n");
@@ -13,3 +12,4 @@ int main(void)
 
 	return 0;
 }
+#endif

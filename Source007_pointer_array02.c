@@ -349,7 +349,7 @@ int main()
 
 #endif
 
-#if 1
+#if 0
 #define BUF_LEN 256
 int main()
 {
