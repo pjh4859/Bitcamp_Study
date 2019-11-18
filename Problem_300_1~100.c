@@ -289,9 +289,227 @@ main()
 #endif
 
 #if 0 //017 정수형 상수 이해하기(int)
+#include<stdio.h>
+#define HUNDRED_THOUSAND 100000
+
+const int j = 200000;
+main()
+{
+	//HUNDRED_THOUSAND = 100000;	//에러 발생
+	//j = 200000;	//에러 발생
+
+	printf("정수형 상수 HUNDRED_THOUSAND의 값은 %d\n", HUNDRED_THOUSAND);
+	printf("정수형 상수j의 값은 %d\n", j);
+}
+#endif
+#if 0 //018 실수형 상수 이해하기(double)
+#include<stdio.h>
+#define PI 3.141592
+
+const double j = 1.23456789;
 
 main()
 {
-	
+	//PI = 3.141592; //에러 발생
+	//j = 1.23456789; //Error occured
+
+	printf("실수형 상수 PI의 값은%f\n", PI);
+	printf("실수형 상수 j의 값은%f\n", j);
+}
+#endif
+#if 0 //019 논리형 상수 이해하기(bool)
+#include<stdio.h>
+
+#define TRUE 1
+#define FALSE 0
+
+main()
+{
+	if (TRUE)
+	{
+		printf("TRUE의 값은 참입니다.\n");
+	}
+	else
+	{
+		printf("TRUE의 값은 거짓입니다.\n");
+	}
+	if (FALSE)
+	{
+		printf("FALSE의 값은 참입니다.\n");
+	}
+	else
+	{
+		printf("FALSE의 값은 거짓입니다.\n");
+	}
+}
+#endif
+
+#if 0 //020 문자열형 상수 이해하기(char)
+#include<stdio.h>
+
+#define KOREA "대한민국"
+#define BOOK "This is a book."
+
+const char* SOCCER = "나는 축구를 좋아합니다.";
+
+main()
+{
+	printf("문자열의 상수	KOREA의 값:%s \n", KOREA);
+	printf("문자열의 상수	 BOOK의 값:%s \n", BOOK);
+	printf("문자열의 상수  SOCCER의 값:%s \n", SOCCER);
+}
+
+#endif
+
+#if 0 //021 대입 연상자 이해하기(=)
+#include<stdio.h>
+
+main()
+{
+	int x = 1;
+	int y = 2;
+	int  z;
+	int zz;
+
+	z = x + y;
+
+	zz = printf("z의 값:%d\n", z);
+	printf("zz의 값:%d\n", zz);
+}
+#endif
+
+#if 0 //022 부호 연산자 이해하기(+,-)
+#include<stdio.h>
+
+main()
+{
+	int x = +4;
+	int y = -2;
+
+	printf("x + (-y) = %d \n", x + (-y));
+	printf("-x + (+y) = %d\n", -x + (+y));
+}
+#endif
+
+#if 0 //023 사칙 연산자 이해하기(+,-,*,/)
+#include<stdio.h>
+
+main()
+{
+	int x = 4;
+	int y = 2;
+	int z;
+
+	z = x + y;
+	z = x - y;
+	z = x * y;
+	z = x / y;
+	z = (x + y) * (x - y);
+	z = (x * y) + (x / y);
+	z = x + y + 2004;
+	z = 2004 - x - y;
+}
+#endif
+
+#if 0 //024 증감 연산자 이해하기(++,--)
+#include<stdint.h>
+
+main()
+{
+	int x = 1;
+
+	printf("x = %d\n", x++);
+	printf("x = %d\n", x++);
+	printf("x = %d\n", ++x);
+	printf("x = %d\n", x--);
+	printf("x = %d\n", x--);
+	printf("x = %d\n", --x);
+}
+#endif
+
+#if 0 //025 관계 연산자 이해하기(<,>,=,>=,<=,!=)
+#include<stdio.h>
+
+main()
+{
+	int x = 1;
+	int y = 2;
+	int z = 3;
+
+	 if(x==y)printf("x는 y와 같습니다.\n");
+	 if(x!=y)printf("x는 y와 같지 않습니다.\n");
+	 if(x>y)printf("x는 y보다 큽니다.\n");
+	 if(x<y)printf("x는 y보다 작습니다.\n");
+	 if(x>=z)printf("y는 z보다 크거나 같습니다.\n");
+	 if(x<=z)printf("y는 z보다 작거나 같습니다.\n");
+}
+
+#endif
+
+#if 0 //026 논리 연산자 이해하기(||,&&,!)
+#include<stdio.h>
+
+main()
+{
+	int x = 5;
+	int y = 2;
+
+	if (x > 0 && x < 10)
+	{
+		printf("0<x<10\n");
+	}
+
+	if(x<0||y==2)
+	{
+		printf("x가 0보다 작거나,y는 2 입니다.\n");
+	}
+	if (!(x > y))
+	{
+		printf("x가y보다 크지 않습니다.\n");
+	}
+}
+#endif
+
+#if 0 //027 조건 연산자 이해하기(?:)
+#include<stdio.h>
+
+main()
+{
+	int x = 1;
+	int y = 2;
+	int max;
+
+	max = x > y ? x : y;
+	printf("%d\n", max);
+}
+
+#endif
+
+#if 0 //028 쉼표 연산자 이해하기(,)
+#include<stdio.h>
+
+main()
+{
+	int x = 1, y = 2, max;
+
+	max = x > y ? x : y;
+
+	printf("max=%d,x=%d,y=%d", max, x, y);
+}
+#endif
+
+#if 1 //029 비트 연산자 이해하기 (|, &, ~, ^, <<, >>)
+#include<stdio.h>
+
+main()
+{
+	unsigned char ch = 255, mask = 0x7F;
+
+
+
+
+
+
+
 }
 #endif
