@@ -498,18 +498,217 @@ main()
 }
 #endif
 
-#if 1 //029 비트 연산자 이해하기 (|, &, ~, ^, <<, >>)
+#if 0 //029 비트 연산자 이해하기 (|, &, ~, ^, <<, >>)
 #include<stdio.h>
 
 main()
 {
 	unsigned char ch = 255, mask = 0x7F;
 
+	printf("%d\n",ch);
+	printf("%d\n",ch&mask);
+	printf("%d\n",(char)~ch);
+	printf("%d\n",ch^ch);
+	printf("%d\n",ch>>1);
+	printf("%d\n",mask<<1);
+}
+#endif
 
+#if 0 //030 캐스트 연산자 이해하기
+#include<stdio.h>
 
+main()
+{
+	int x = 5, y = 2;
 
+	printf("%d\n", x / y);
+	printf("%f\n", (double)x / y);
+}
 
+#endif
+#if 0 //031 sizeof 연산자 이해하기
+#include<stdio.h>
 
+main()
+{
+	char i;
+	int j;
+	double k;
+	long t;
+	long long tt;
+	short ttt;
 
+	printf("%d\n", sizeof(i));
+	printf("%d\n", sizeof(j));
+	printf("%d\n", sizeof(k));
+	printf("%d\n", sizeof(t));
+	printf("%d\n", sizeof(tt));
+	printf("%d\n", sizeof(ttt));
+}
+#endif
+
+#if 0 //032 중첩 조건문 이해하기(if~else)
+#include<stdio.h>
+
+main()
+{
+	int i = 1;
+	int j = 2;
+	int k = 7;
+
+	if (i == 1)
+	{
+		if (j == 2)
+		{
+			if (k == 3)
+				printf("i=1,j=2,k=3입니다.");
+			else if(k==4)
+				printf("i=1,j=2,k=4입니다.");
+			else if (k==5)
+				printf("i=1,j=2,k=5입니다.");
+			else
+				printf("i=1,j=2,k=%d입니다.",k);
+
+				
+		}
+	}
+}
+
+#endif
+
+#if 0 //033 중첩 순환문 이해하기(fir~continue~break)
+#include<stdio.h>
+main()
+{
+	int i;
+	int j;
+
+	for (i = 1; i <= 9; i++)
+	{
+		for (j = 1; j <= 9; j++)
+		{
+			printf("%d*%d=%2d\n", i, j, i*j);
+		}
+	}
+}
+
+#endif
+#if 0 //034 조건 선택문 이해하기(switch~case~default)
+#include<stdio.h>
+
+main()
+{
+	int i = 5;
+
+	switch (i)
+	{
+	case 1:
+		printf("i는1입니다.");
+		break;
+	case 2:
+		printf("i는2입니다.");
+		break;
+	default:
+		printf("i는 %d입니다.", i);
+		break;
+
+	}
+}
+#endif
+#if 0 //035 조건 순환문 이해하기1(while~continue~break)
+#include<stdio.h>
+
+main()
+{
+	int i = 1;
+	int hap = 0;
+
+	while (i <= 10)
+	{
+		hap = hap + i;
+		i++;
+	}
+	printf("hap=%d", hap);
+}
+
+#endif
+#if 0 //036 조건 순환문 이해하기2(do~while~continue~break)
+#include<stdio.h>
+
+main()
+{
+	int i = 1;
+	int hap = 0;
+
+	do
+	{
+		hap = hap + i;
+		i++;
+	} while (i <= 10);
+	printf("hap=%d", hap);
+}
+#endif
+
+#if 0 //037 무조건 분기문 이해하기
+#include<stdio.h>
+
+main()
+{
+	int i;
+	int j;
+
+	for (i = 1; i <= 100; i++)
+	{
+		for (j = 1; j <= 9; j++)
+		{
+			printf("%d*%d=%2d\n", i, j, i * j);
+			if (i == 9 && j == 9)goto ku_ku_end;
+		}
+	}
+ku_ku_end:;
+}
+#endif
+
+#if 0 //038 문자열 이해하기
+#include<stdio.h>
+
+#define ASCII_BEGIN 0
+#define ASCII_END 255
+
+main()
+{
+	int i;
+
+	for (i = ASCII_BEGIN; i <= ASCII_END; i++)
+	{
+		printf("ASCII코드(%3d),문자='%c'\n", i, i);
+	}
+}
+#endif
+#if 0 //039 배열 이해하기
+#include<stdio.h>
+
+main()
+{
+	int kor[10] = { 100,90,35,60,75,55,95,80,90,70 };
+	int i;
+
+	for (i = 0; i < 10; i++)
+	{
+		printf("%d ", kor[i]);
+	}
+}
+#endif
+
+#if 0 //040 메모리 이해하기
+#include<stdio.h>
+
+main()
+{
+	int i = 0;
+	int j = 1;
+
+	printf("값=%d,메모리주소=%p\n", i, &i);
+	printf("값=%d,메모리주소=%p\n", j, &j);
 }
 #endif
