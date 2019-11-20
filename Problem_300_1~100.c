@@ -712,3 +712,367 @@ main()
 	printf("값=%d,메모리주소=%p\n", j, &j);
 }
 #endif
+#if 0 //041 포인터 이해하기
+#include<stdio.h>
+
+main()
+{
+	int saram_A = 0;
+	int saram_B = 0;
+	int* pointer;
+	int* psaram;
+
+	pointer = &saram_A;
+	* pointer = 1;
+	printf("%d,%d\n", saram_A, *pointer);
+
+	psaram = &saram_A;
+	* psaram = 2;
+	printf("%d,%d %d\n", saram_A, *pointer,*psaram);
+
+	pointer = &saram_B;
+	*pointer = 3;
+	printf("%d,%d %d\n", saram_A,saram_B, *pointer);
+
+	psaram = &saram_B;
+	*psaram = 4;
+	printf("%d,%d %d %d\n", saram_A,saram_B, *pointer, *psaram);
+
+}
+#endif
+#if 0 //042 널(NULL) 문자 이해하기
+#include<stdio.h>
+
+int length(char* pstr);
+
+main()
+{
+	int len = length("abcde");
+
+	printf("길이 = %d", len);
+}
+
+int length(char* pstr)
+{
+	int len = 0;
+
+	while (*pstr != NULL)
+	{
+		pstr++;
+		len++;
+	}
+return len;
+}
+#endif
+#if 0 //043 구조체 이해하기
+#include<stdio.h>
+
+struct tagSungJuk
+{
+	int kor;
+	int eng;
+	int math;
+};
+main()
+{
+	struct tagSungJuk SJ;
+
+	SJ.kor = 100;
+	SJ.eng = 95;
+	SJ.math = 99;
+
+	printf("총합 = %d", SJ.kor + SJ.eng + SJ.math);
+}
+#endif
+#if 0 //044 공용체 이해하기
+#include<stdint.h>
+
+union tagVariant
+{
+	int i;
+	float d;
+};
+
+main()
+{
+	union tagVariant V;
+
+	V.i = 0;
+	V.d = 5.5;
+
+	printf("V.i=%d\n", V.i);
+	printf("V.d=%f\n", V.d);
+}
+#endif
+
+#if 0 //045 열거형 이해하기
+#include<stdint.h>
+
+enum { Sun = 0, Mon, Tue, Wed, Thr, Fri, Sat };
+
+main()
+{
+	printf("%d", Sun);
+	printf("%d", Mon);
+	printf("%d", Tue);
+	printf("%d", Wed);
+	printf("%d", Thr);
+	printf("%d", Fri);
+	printf("%d", Sat);
+}
+#endif
+#if 0 //046 데이터형 정의하기
+#include<stdint.h>
+#define true 1
+#define false 0
+
+typedef int bool;
+
+main()
+{
+	bool bCondition;
+
+	bCondition = true;
+
+	if (bCondition == true)
+	{
+		printf("조건식은 true입니다.");
+	}
+}
+#endif
+#if 0 //047 함수와 인수 이해하기
+#include<stdint.h>
+
+int print(char* string);
+
+main()
+{
+	print("This is a function!");
+}
+int print(char* string)
+{
+	int len = 0;
+
+	while (*string != (char)NULL)
+	{
+		printf("%c", *string);
+		string++;
+		len++;
+	}
+	return len;
+}
+#endif
+#if 0 //048 변수의 범위 이해하기
+#include<stdio.h>
+
+void print_x(int x);
+void print_gx(void);
+int x = 20;
+
+main()
+{
+	int x = 5;
+	printf("x=%d\n", x);
+
+	print_x(10);
+	print_gx();
+}
+
+void print_x(int x)
+{
+	printf("x=%d\n", x);
+}
+
+void print_gx(void)
+{
+	printf("x=%d\n", x);
+}
+#endif
+#if 0 //049 include 문 이해하기
+#include<stdio.h>
+#include<conio.h>
+
+main()
+{
+	int ch;
+	printf("아무키나 누르세요...\n");
+
+	ch = _getch();
+
+	printf("%c 키가 눌러졌습니다.",ch);
+}
+#endif
+#if 0 //050 매크로 이해하기
+#include<stdio.h>
+
+#define MAX(a,b) a>b?a:b
+#define MIN(a,b) a<b?a:b
+
+main()
+{
+	int i, j;
+
+	i = 5;
+	j = 7;
+
+	printf("최대값은 %d입니다.\n", MAX(i, j));
+	printf("최소값은 %d입니다.\n", MIN(i, j));
+}
+#endif
+#if 0 //051 문자 입력받기(getch)
+#include<stdio.h>
+#include<conio.h>
+
+#define ENTER 13
+
+void main(void)
+{
+	int ch;
+
+	printf("아스키 코드로 변환할 키를 누르세요...\n");
+	printf("ENTER 키를 누르면 프로그램은 종료됩니다.\n");
+
+	do
+	{
+		ch = _getch();
+
+		printf("문자: (%c),아스키 코드=(%d)\n", ch, ch);
+
+	} while (ch != ENTER);
+}
+#endif
+#if 0 //052 문자 출력하기(putch)
+#include<stdio.h>
+#include<conio.h>
+
+int print(char* string);
+
+void main(void)
+{
+	print("This is a putch function!");
+}
+int print(char* string)
+{
+	int len = 0;
+
+	while (*string != (char)NULL)
+	{
+		_putch(*string);
+		string++;
+		len++;
+	}
+
+	_putch('\r');
+	_putch('\n');
+
+	return len;
+}
+#endif
+#if 0 //053 정수값 입력받기(scanf)
+#include<stdio.h>
+
+void main(void)
+{
+	int count;
+	int tmp;
+	int total = 0;
+
+	for (count = 1; count <= 3; count++)
+	{
+		printf("%d 번째 정수값을 입력한 후 Enter 키를 누르세요.\n", count);
+		scanf_s("%d", &tmp);
+		total += tmp;
+
+		printf("입력 값=%d,총 합= %d\n", tmp, total);
+
+	}
+	printf("읽은 정수의 총 합은 %d입니다.\n", total);
+}
+#endif
+#if 0 //054 정수값 출력하기(printf)
+#include<stdio.h>
+
+void main(void)
+{
+	int i = 100;
+	int j = 1000;
+	int k = 12345;
+
+	printf("[%d]\n", i);
+	printf("[%d]\n", j);
+	printf("[%d]\n", k);
+
+	printf("[%5d]\n", i);
+	printf("[%5d]\n", j);
+	printf("[%5d]\n", k);
+
+	printf("[%10d]\n", i);
+	printf("[%10d]\n", j);
+	printf("[%10d]\n", k);
+
+	printf("[%-10d]\n", i);
+	printf("[%-10d]\n", j);
+	printf("[%-10d]\n", k);
+}
+#endif
+#if 0 //055 문자열 입력받기(gets)
+#include<stdio.h>
+
+int count(char* str);
+
+void main(void)
+{
+	char string[100];
+	char* ret;
+
+	ret = gets(string);
+
+	if (ret != NULL)
+	{
+		printf("문자'a'의 갯수는%d개입니다.", count(string));
+	}
+}
+int count(char* str)
+{
+	int cnt = 0;
+
+	while (*str != (int)NULL)
+	{
+		if (*str++ == 'a')cnt++;
+	}
+	return cnt;
+}
+#endif
+#if 0 //056 문자열 출력하기(puts)
+#include<stdio.h>
+
+#define KOREA "대한민국"
+#define SUMMER "여름"
+
+void main()
+{
+	const char* winter = "겨울";
+
+	puts(KOREA);
+	puts(SUMMER);
+	puts(winter);
+}
+#endif
+#if 1 //057 문자열 복사하기(strcpy)
+#define _CRT_SECURE_NO_WARNINGS
+#pragma warning(disable:4996)
+#include<stdio.h>
+#include<string.h>
+
+#define KOREA "대한민국"
+
+void main(void)
+{
+	char* string1;
+	char string2[100];
+	
+	strcpy(string1, KOREA);
+	strcpy(string2, KOREA);
+	strcpy(string2,"봄");
+}
+#endif
