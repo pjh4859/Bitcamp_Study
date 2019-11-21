@@ -1058,7 +1058,7 @@ void main()
 	puts(winter);
 }
 #endif
-#if 1 //057 문자열 복사하기(strcpy)
+#if 0 //057 문자열 복사하기(strcpy)
 #define _CRT_SECURE_NO_WARNINGS
 #pragma warning(disable:4996)
 #include<stdio.h>
@@ -1071,8 +1071,175 @@ void main(void)
 	char* string1;
 	char string2[100];
 	
-	strcpy(string1, KOREA);
+	//strcpy(string1, KOREA);
 	strcpy(string2, KOREA);
 	strcpy(string2,"봄");
+	printf("string2: %s", string2);
 }
+#endif
+#if 0 //058 문자열을 복사하는 함수 만들기
+#include <stdio.h>
+
+#define KOREA "대한민국"
+
+char* My_strcpy(char* dest, const char* src);
+
+void main(void)
+{
+	char string[100];
+	My_strcpy(string, KOREA);
+	puts(string);
+}
+
+char* My_strcpy(char* dest, const char* src)
+{
+	if (dest == (int)NULL || src == (int)NULL)
+	{
+		if ( *dest != (int)NULL) * dest = (int)NULL;
+		return NULL;
+	}
+	do
+	{
+		*dest++ = *src;
+	} while (*src++ != (int)NULL);
+	return dest;
+}
+
+#endif
+#if 0 //059 문자열을 대.소문자로 구분하여 비교하기(strcmp)
+#include<stdio.h>
+#include<string.h>
+
+#define SKY "sky"
+
+void main(void)
+{
+	char string[100];
+	int ret;
+
+	printf("영단어를 입력한 후 Enter 키를 치세요!\n");
+	printf("sky 를 입력하면 프로그램이 종료됩니다.\n");
+
+	do
+	{
+		gets(string);
+
+		ret = strcmp(string, SKY);
+
+		if (ret == 0)
+		{
+			printf("%s ==%s, ret=%d\n", string, SKY, ret);
+			break;
+		}
+		else if (ret < 0)printf("%s<%s,ret=%d\n", string, SKY, ret);
+		else printf("%s>%s,ret=%d\n", string, SKY, ret);
+	} while (1);
+}
+
+#endif
+
+#if 0 //060 문자열을 비교하는 함수 만들기
+#include<stdio.h>
+
+#define SKY "sky"
+
+int My_strcmp(const char* string1, const char* string2);
+
+void main(void)
+{
+	char string[100];
+	int ret;
+
+	printf("영단어를 입력한 후 Enter 키를 치세요!\n");
+	printf("sky를 입력하면 프로그램이 종료됩니다.\n");
+
+	do
+	{
+		gets_s(string,sizeof(string));
+		ret = My_strcmp(string, SKY);
+
+		if (ret == 0)
+		{
+			printf("%s == %s,ret = %d\n", string, SKY, ret);
+			break;
+		}
+		else if (ret < 0)printf("%s < %s,ret=%d \n", string, SKY, ret);
+		else printf("%s>%s,ret=%d\n", string, SKY, ret);
+	} while (1);
+}
+
+int My_strcmp(const char* string1, const char* string2)
+{
+	if (*string1 == (int)NULL && *string2 == (int)NULL)return 0;
+
+	while (*string1 != (int)NULL)
+	{
+		if (*string2 == (int)NULL) return 1;
+
+		if (*string1 == *string2)
+		{
+			string1++;
+			string2++;
+			continue;
+		}
+		if (*string1 < *string2)return -1;
+		else return 1;
+	}
+	if (*string2 != (int)NULL)return -1;
+
+	return 0;
+}
+#endif
+#if 0 //061 문자열을 일정 크기만큼 비교하기(strncmp)
+#include<stdio.h>
+#include<string.h>
+
+#define SKY "sky"
+void main()
+{
+	char string[100];
+	int ret;
+
+	printf("영단어를 입력한 후 Enter 키를 치세요!\n");
+	printf("sky로 시작되는 단어를 입력하면 프로그램이 종료됩니다.\n");
+
+	do
+	{
+		gets_s(string, sizeof(string));
+
+		ret = strncmp(string, SKY, 3);
+
+		if (ret == 0)
+		{
+			printf("%3.3s == %s,ret = %d\n", string, SKY, ret);
+			break;
+		}
+		else if (ret < 0)printf("%s<%s,ret=%d\n", string, SKY, ret);
+		else printf("%s>%s,ret=%d\n", string, SKY, ret);
+	} while (1);
+}
+#endif
+#if 0 //062 문자열 연결하기(strcat)
+#include<stdio.h>
+#include<string.h>
+
+void main()
+{
+	char string1[100];
+	char string2[100];
+
+	printf("첫 번째 단어를 입력하세요!\n");
+	gets_s(string1, sizeof(string1));
+
+	printf("두 번째 단어를 입력하세요!\n");
+	gets_s(string2, sizeof(string2));
+
+	strcat_s(string1,sizeof (string1) ,string2);
+
+	puts(string1);
+}
+#endif
+#if 0 //063문자열의 길이 구하기(strlen)
+
+
 #endif
