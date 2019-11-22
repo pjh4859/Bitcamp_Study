@@ -1239,7 +1239,286 @@ void main()
 	puts(string1);
 }
 #endif
-#if 0 //063문자열의 길이 구하기(strlen)
+#if 0 //063 문자열의 길이 구하기(strlen)
+#include<stdio.h>
+#include<string.h>
 
+void main(void)
+{
+	char string[200];
 
+	printf("문장을 입력한 후, Enter키를 치세요!\n");
+	printf("아무것도 입력하지 않으면 프로그램은 종료됩니다!\n");
+
+	do
+	{
+		gets_s(string, sizeof(string));
+
+		if (strlen(string) == 0)
+		{
+			break;
+		}
+		printf("문자열의 길이는 %d입니다.\n", strlen(string));
+	} while (1);
+}
+
+#endif
+#if 0 //064 문자열 검색하기(strstr)
+#include<stdio.h>
+#include<string.h>
+
+#define SKY "sky"
+
+void main()
+{
+	char string[100];
+	char* ret;
+
+	puts("문자열을 입력한 후 Enter 키를 치세요!");
+	puts("문자열 중에 sky가 포함되어 있으면,프로그램은 종료됩니다.");
+
+	do
+	{
+		gets_s(string, sizeof(string));
+		ret = strstr(string, SKY);
+		if (ret == NULL)
+		{
+			puts("문자열 중에 sky가 없습니다.");
+		}
+		else
+		{
+			printf("%d주소 %d 위치에서 sky 문자열을 찾았습니다.",ret,ret - string);
+			break;
+		}
+	} while (1);
+}
+#endif
+#if 0 //065 문자열 중에서 문자 검색하기(strchr)
+#include<stdio.h>
+#include<string.h>
+
+#define FIND_CHAR  'h'
+
+void main(void)
+{
+	char string[100];
+	char* ret;
+
+	puts("문자열을 입력한 후 Enter키를 치세요!");
+	puts("문자열 중에 'h'가 포함되어 있으면, 프로그램은 종료됩니다.");
+
+	do
+	{
+		//scanf_s("%c", string);
+		gets_s(string, sizeof(string));
+		ret = strchr(string, FIND_CHAR);
+		printf("%s\n", string);
+
+		if (ret == NULL)
+		{
+			puts("문자열 중에 'h'가 없습니다.");
+		}
+		else
+		{
+			printf("%d 위치에서 'h'문자를 찾았습니다.", ret - string);
+			break;
+		}
+	} while (1);
+}
+#endif
+#if 0 // 066 문자열 중에서 일치되는 첫 문자의 위치 구하기(strcspn)
+#include<stdio.h>
+#include<string.h>
+
+void main(void)
+{
+	char* string = "This is a string $$$";
+	char* strCharSet = "~!@#$%^&*()_+-={}[]:;'<>./?";
+	unsigned int pos;
+
+	pos = strcspn(string, strCharSet);
+
+	puts("0			1	    2		3");
+	puts("0123456789012345678901234567890");
+	puts(string);
+	puts(strCharSet);
+
+	printf("%d 위치에서 일치되는 첫 문자를 발견하였습니다.\n", pos);
+}
+
+#endif
+#if 0 // 067 문자열 중에서 일치되지 않는 첫 문자의 위치 구하기(strspn)
+#include<stdio.h>
+#include<string.h>
+
+void main(void)
+{
+	char* string = "this is a very good!";
+	char* strCharSet = "abcdefghijklmnopqrstuvwxyz";
+	unsigned int pos;
+
+	pos = strspn(string, strCharSet);
+
+	puts("0		1	2	3");
+	puts("0123456789012345678901234567890");
+	puts(string);
+	puts(strCharSet);
+
+	printf("%d 위치에서 일치되지 않는 문자를 발견하였습니다.\n", pos);
+}
+#endif
+#if 0 // 068 문자열을 구분자로 분리하기 1(strtok)
+#include<stdio.h>
+#include<string.h>
+#pragma warning(disable:4996)
+#define TOKEN " "
+
+void main(void)
+{
+	char string[100];
+	char* token;
+
+	puts("문자열을 입력한 후 Enter키를 치세요!");
+
+	gets_s(string, sizeof(string));
+
+	token = strtok(string, TOKEN);
+	while (token != NULL)
+	{
+		puts(token);
+		token = strtok(NULL, TOKEN);
+	}
+}
+#endif
+#if 0 // 069 문자열을 구분자로 분리하기 2(strpbrk)
+#include<stdio.h>
+#include<string.h>
+
+#define TOKEN " "
+
+void main()
+{
+	char string[100];
+	char* pos;
+
+	puts("문자열을 입력한 후 Enter키를 치세요!");
+	gets(string);
+	pos = strpbrk(string, TOKEN);
+	while (pos != NULL)
+	{
+		puts(pos++);
+		pos = strpbrk(pos, TOKEN);
+	}
+}
+#endif
+#if 0 // 070 문자열을 특정 문자로 채우기(strset)
+#include<stdio.h>
+#include<string.h>
+
+void main()
+{
+	char string[100];
+
+	puts("문자열을 입력한 후 Enter키를 치세요!");
+	puts("아무 문자도 입력하지 않으면 프로그램은 종료됩니다!");
+
+	do
+	{
+		gets_s(string,sizeof(string));
+		if (strlen(string) == 0)break;
+		_strset_s(string,sizeof(string), string[0]);		
+		puts(string);
+	} while (1);
+}
+#endif
+#if 0 // 071 부분 문자열을 특정 문자로 채우기(strnset)
+#include<stdio.h>
+#include<string.h>
+
+void main()
+{
+	char string[100];
+
+	puts("문자열을 입력한 후 Enter키를 치세요!");
+	puts("아무 문자도 입력하지 않으면 프로그램은 종료됩니다!");
+
+	do
+	{
+		gets_s(string, sizeof(string));
+		if (strlen(string) == 0)break;
+		_strnset_s(string, sizeof(string), '*', 5);
+		puts(string);
+	} while (1);
+}
+#endif
+#if 0 // 072 문자열을 대문자로 변환하기(strupr)
+#include<stdio.h>
+#include<string.h>
+
+void main()
+{
+	char string[100];
+
+	puts("문자열을 입력한 후 Enter키를 치세요!");
+	puts("아무 문자도 입력하지 않으면 프로그램은 종료됩니다!");
+
+	do
+	{
+		gets_s(string, sizeof(string));
+		if (strlen(string) == 0)break;
+		_strupr_s(string,sizeof(string));
+		puts(string);
+	} while (1);
+}
+#endif
+
+#if 0 // 073 문자열을 소문자로 변환하기(strlwr)
+#include<stdio.h>
+#include<string.h>
+
+void main()
+{
+	char string[100];
+
+	puts("문자열을 입력한 후 Enter키를 치세요!");
+	puts("아무 문자도 입력하지 않으면 프로그램은 종료됩니다!");
+
+	do
+	{
+		gets_s(string, sizeof(string));
+		if (strlen(string) == 0)break;
+		_strlwr_s(string, sizeof(string));
+		puts(string);
+	} while (1);
+}
+#endif
+#if 0 // 074 문자열을 거꾸로 뒤집기(strrev)
+#include<stdio.h>
+#include<string.h>
+
+void main()
+{
+	char string[100];
+
+	puts("문자열을 입력한 후 Enter키를 치세요!");
+	puts("아무 문자도 입력하지 않으면 프로그램은 종료됩니다!");
+
+	do
+	{
+		gets_s(string, sizeof(string));
+		if (strlen(string) == 0)break;
+		_strrev(string);
+		puts(string);
+	} while (1);
+}
+#endif
+#if 0 // 075 문자열을 중복 생성하기(strdup)
+#include<stdio.h>
+#include<string.h>
+#include<malloc.h>
+
+void main()
+{
+
+}
 #endif
