@@ -1519,6 +1519,304 @@ void main()
 
 void main()
 {
+	char string[100];
+	char* pstr;
 
+	puts("문자열을 입력한 후 Enter 키를 치세요!");
+	puts("아무 문자도 입력하지 않으면 프로그램은 종료됩니다!");
+
+	do
+	{
+		gets_s(string, sizeof(string));
+		if (strlen(string) == 0) break;
+		pstr = _strdup(string);
+		strcpy_s(string,sizeof(string), "temporary string");
+		
+		printf("문자열string: %s\n", string);
+		printf("문자열pstr: %s\n", pstr);
+
+		free(pstr);
+	} while (1);
+}
+#endif
+#if 0 // 076 문자열을 형식화하기(sprintf)
+#include<stdio.h>
+
+void main(void)
+{
+	char cValue = 'a';
+	int iValue = 1234567;
+	long lValue = 7890123;
+	float fValue = 3.141592;
+	double dValue = 3.141592;
+	char* string = "korea";
+	char buffer[100];
+
+	sprintf_s(buffer, sizeof(buffer), "char형은%c", cValue);
+	puts(buffer);
+
+	sprintf_s(buffer, sizeof(buffer), "int 형은%d", iValue);
+	puts(buffer);
+
+	sprintf_s(buffer, sizeof(buffer), "long 형은%ld", lValue);
+	puts(buffer);
+
+	sprintf_s(buffer, sizeof(buffer), "float 형은%f", fValue);
+	puts(buffer);
+
+	sprintf_s(buffer, sizeof(buffer), "double 형은%e", dValue);
+	puts(buffer);
+
+	sprintf_s(buffer,sizeof(buffer), "char* 형은%s", string);
+	puts(buffer);
+	
+}
+
+
+#endif
+#if 0 // 077 문자열을 정수로 변환하기 1(atoi)
+#include<stdio.h>
+#include<stdlib.h>
+
+void main()
+{
+	int count;
+	int total = 0;
+	char string[100];
+
+	for (count = 1; count <= 3; count++)
+	{
+		printf("%d 번째 문자열을 입력한 후 Enter키를 누르세요.\n", count);
+		gets_s(string, sizeof(string));
+		total += atoi(string);
+
+		printf("입력 값 = %d, 총 합= %d\n", atoi(string), total);
+
+	}
+	printf("읽은 문자열의 총 합은 %d입니다.\n", total);
+}
+#endif
+# if 0 // 078 문자열을 정수로 변환하기 2(atol)
+#include<stdio.h>
+#include<stdlib.h>
+
+void main()
+{
+	char* string1 = "2는 1보다 큽니다.";
+	char* string2 = "1004는 천사입니다.";
+	char* string3 = "2016년도 입니다.";
+	char* string4 = "오늘은 6월 9일입니다.";
+	long t1, t2, t3, t4;
+
+	puts(string1);
+	puts(string2);
+	puts(string3);
+	puts(string4);
+
+	t1 = atol(string1);
+	t2 = atol(string2);
+	t3 = atol(string3);
+	t4 = atol(string4);
+
+	printf("문자열을 숫자로 변환한 값:%ld, %ld, % ld, %ld \n", t1, t2, t3, t4);
+	printf("총 합은 %d입니다.\n", t1 + t2 + t3 + t4);
+}
+#endif
+#if 0 // 079 문자열을 정수로 변환하기 3(strtol)
+#include<stdio.h>
+#include<stdlib.h>
+
+void main()
+{
+	char* string = "0xFF";
+	char* stop;
+	int radix;
+	long value;
+
+	radix = 16;
+
+	value = strtol(string, &stop, radix);
+
+	printf("%d 개의 문자가 변환되었습니다. \n", stop - string);
+	printf("16진수 %s를 숫자로 변환하면 %ld 입니다.\n", string, value);
+}
+#endif
+#if 0 // 080 문자열을 정수로 변환하기 4(strtoul)
+#include<stdio.h>
+#include<stdlib.h>
+
+void main(void)
+{
+	char* string = "11000";
+	char* stop;
+	int radix;
+	unsigned long value;
+
+	radix = 2;
+
+	value = strtoul(string, &stop, radix);
+
+	printf("%d 개의 문자가 변환되었습니다.\n", stop - string);
+	printf("2진수 %s를 숫자로 변환하면 %u입니다.\n", string, value);
+}
+
+#endif
+#if 0 // 081 문자열을 실수로 변환하기 1(atof)
+#include<stdio.h>
+#include<stdlib.h>
+
+void main(void)
+{
+	char* string1 = "2.1은 1.0보다 큽니다.";
+	char* string2 = "1004.5는 천사.오 입니다.";
+	char* string3 = "2005년도 입니다.";
+	char* string4 = "오늘은 6월 9일입니다.";
+	double t1, t2, t3, t4;
+
+	puts(string1);
+	puts(string2);
+	puts(string3);
+	puts(string4);
+
+	t1 = atof(string1);
+	t2 = atof(string2);
+	t3 = atof(string3);
+	t4 = atof(string4);
+
+	printf("문자열을 숫자로 변환한 값:%.1f,%.1f,%.1f,%.1f\n",
+		t1,t2,t3,t4);
+	printf("총 합은 %.2f입니다.\n", t1 + t2 + t3 + t4);
+}
+#endif
+#if 0 // 082 문자열을 실수로 변환하기 2(strtod)
+#include<stdio.h>
+#include<stdlib.h>
+
+void main()
+{
+	char* string = "1.234E-10";
+	char* stop;
+	double value;
+
+	value = strtod(string, &stop);
+
+	printf("%d 개의 문자가 변환되었습니다.\n", stop - string);
+	printf("문자열 [%s]를 숫자로 변환하면 %E입니다.\n", string, value);
+}
+#endif
+#if 0 // 083 정수를 문자열로 변환하기 1(itoa)
+#include<stdio.h>
+#include<stdlib.h>
+
+void main()
+{
+	int value;
+	char string[100];
+	int radix;
+
+	radix = 10;
+
+	value = 5;
+	_itoa_s(value, string,sizeof(string), radix);
+	printf("변환된 문자열을 %s입니다.\n",string);
+
+	value = -12345;
+	_itoa_s(value, string, sizeof(string), radix);
+	printf("변환된 문자열은 %s 입니다.\n", string);
+}
+#endif
+#if 0 // 084 정수를 문자열로 변환하기 2(itoa)
+#include<stdio.h>
+#include<stdlib.h>
+
+void main()
+{
+	long value;
+	char string[100];
+	int radix;
+
+	radix = 2;
+
+	value = 12345;
+	_itoa_s(value, string, sizeof(string), radix);
+	printf("변환된 문자열은 %s 입니다.\n", string);
+
+	value = -12345;
+	_itoa_s(value, string, sizeof(string), radix);
+	printf("변환된 문자열은 %s 입니다.\n", string);
+}
+#endif
+
+#if 0 // 085 정수를 문자열로 변환하기 3(_ultoa)
+#include<stdio.h>
+#include<stdlib.h>
+
+void main()
+{
+	long value;
+	char string[100];
+	int radix;
+
+	radix = 16;
+
+	value = 34567;
+	
+	_ultoa_s(value, string, sizeof(string), radix);
+	printf("변환된 문자열은 %s 입니다.\n", string);
+
+	value = 1234567890;
+	_ultoa_s(value, string, sizeof(string), radix);
+	printf("변환된 문자열은 %s 입니다.\n", string);
+}
+#endif
+
+#if 0 // 086 실수를 문자열로 변환하기 1(fcvt)
+#include<stdio.h>
+#include<stdlib.h>
+#pragma warning(disable:4996)
+
+void main()
+{
+	double value;
+	char *pstr;
+	int dec, sign;
+
+	value = 3.1415926535;
+	//_fcvt_s(pstr, sizeof(pstr),value, 6, &dec, &sign);
+	pstr = _fcvt(value, 6, &dec, &sign);
+	printf("변환된 문자열은 %s 입니다.\n", pstr);
+	printf("소수점이 위치는%d, 부호는 %d입니다.\n", dec, sign);
+
+	value = -3.1415926535;
+	//_fcvt_s(pstr, sizeof(pstr),value, 6, &dec, &sign);
+	pstr = _fcvt(value, 6, &dec, &sign);
+	printf("변환된 문자열은 %s 입니다.\n", pstr);
+	printf("소수점이 위치는%d, 부호는 %d입니다.\n", dec, sign);
+}
+#endif
+
+#if 0 // 087 실수를 문자열로 변환하기 2(ecvt)
+#include<stdio.h>	
+#include<stdlib.h>
+#pragma warning(disable:4996)
+
+
+void main()
+{
+	double value;
+	char* pstr;
+	int dec, sign;
+
+	value = 3.14e10;
+	pstr = ecvt(value, 3, &dec, &sign);
+
+	printf("변환된 문자열은 %s입니다.\n", pstr);
+	printf("소수점의 위치는 %d, 부호는%d입니다.\n", dec, sign);
+
+	value = -3.14e10;
+	pstr = ecvt(value, 3, &dec, &sign);
+
+	printf("변환된 문자열은 %s입니다.\n", pstr);
+	printf("소수점의 위치는 %d, 부호는%d입니다.\n", dec, sign);
 }
 #endif
