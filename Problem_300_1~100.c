@@ -1820,3 +1820,304 @@ void main()
 	printf("소수점의 위치는 %d, 부호는%d입니다.\n", dec, sign);
 }
 #endif
+#if 0 // 088 실수를 문자열로 변환하기 3(gcvt)
+#include<stdio.h>
+#include<stdlib.h>
+
+void main()
+{
+	double value;
+	char buffer[100];
+
+	value = 3.14e10;
+	_gcvt_s(buffer, sizeof(buffer), value, 3);
+
+	printf("변환된 문자열은 %s입니다. \n", buffer);
+
+	value = -3.14e10;
+	_gcvt_s(buffer, sizeof(buffer), value, 3);
+	
+	printf("벼노한된 문자열은 %s입니다.\n", buffer);
+}
+#endif
+#if 0 // 089 문자가 알파벳인지 검사하기(isalpha)
+#include<stdio.h>
+#include<ctype.h>
+
+void main()
+{
+	char* string = "Cat 1 Car2 Cow3,...";
+	char buffer[100] = { 0, };
+	int cnt = 0;
+
+	while (*string)
+	{
+		if (isalpha(*string))
+		{
+			buffer[cnt++] = *string;
+		}
+		string++;
+	}
+	puts(buffer);
+}
+#endif
+#if 0 // 090 문자가 숫자인지 검사하기(isdigit)
+#include<stdio.h>
+#include<ctype.h>
+
+void main()
+{
+	char* string = "Cat 1 Car2 Ciiw3,...";
+	char buffer[100] = { 0, };
+	int cnt = 0;
+
+	while (*string)
+	{
+		if (isdigit(*string))
+		{
+			buffer[cnt++] = *string;
+		}
+		string++;
+	}
+	puts(buffer);
+}
+#endif
+
+#if 0 // 091 문자가 알파벳 또는 숫자인지 검사하기(isalnum)
+#include<stdio.h>
+#include<ctype.h>
+
+void main()
+{
+	char* string = "Cat+_+_)( 1 Car2 Ciiw3,...";
+	char buffer[100] = { 0, };
+	int cnt = 0;
+
+	while (*string)
+	{
+		if (isalnum(*string))
+		{
+			buffer[cnt++] = *string;
+		}
+		string++;
+	}
+	puts(buffer);
+}
+#endif
+#if 0 // 092 문자가 대문자인지 검사하기(isupper)
+#include<stdio.h>
+#include<ctype.h>
+
+void main()
+{
+	char* string = "This tis Sparta!";
+	char buffer[100] = {0, };
+	int cnt = 0;
+
+	while (*string)
+	{
+		if (isupper(*string))
+		{
+			buffer[cnt++] = *string;
+		}
+		string++;
+	}
+	puts(buffer);
+}
+#endif
+#if 0 // 093 문자가 소문자인지 검사하기(islower)
+#include<stdio.h>
+#include<ctype.h>
+
+void main()
+{
+	char* string = "This tis Sparta!";
+	char buffer[100] = { 0, };
+	int cnt = 0;
+
+	while (*string)
+	{
+		if (islower(*string))
+		{
+			buffer[cnt++] = *string;
+		}
+		string++;
+	}
+	puts(buffer);
+}
+#endif
+
+#if 0 // 094 문자가 공백, 탭문자 또는 개행문자인지 검사하기(isspace)
+#include<stdio.h>
+#include<ctype.h>
+
+void main()
+{
+	char* string = "This tis Sparta!\t\n";
+	int cnt = 0;
+
+	while (*string)
+	{
+		if (isspace(*string))
+		{
+			cnt++;
+		}
+		string++;
+	}
+	printf("공백, 탭 그리고 개행문자의 수는 %d입니다.", cnt);
+}
+#endif
+#if 0 //095 문자열에서 앞,뒤 2바이트씩 교환하기(swab)
+#include<stdio.h>
+#include<stdlib.h>
+
+void main()
+{
+	char string1[] = "1a2b3c4d5e";
+	char string2[] = ".............";
+
+	puts(string1);
+	puts(string2);
+
+	_swab(string1, string2, sizeof(string1) - 1);
+	
+	puts(string1);
+	puts(string2);
+
+}
+#endif
+#if 0 // 096 메모리 할당하기(malloc)
+#include<stdio.h>
+#include<string.h>
+#include<stdlib.h>
+#include<malloc.h>
+
+#define MEMORY "MEMORY"
+void main()
+{
+	char* pmem;
+
+	pmem = malloc(100);
+	if (pmem == NULL)
+	{
+		puts("메모리를 할당할 수 없습니다.");
+
+	}
+	else
+	{
+		strcpy_s(pmem, sizeof(MEMORY), MEMORY);
+		puts(pmem);
+
+		free(pmem);
+	}
+}
+#endif
+#if 0 // 097 메모리를 블록 단위로 할당하기(calloc)
+#include<stdio.h>
+#include<stdlib.h>
+#include<malloc.h>
+
+void main()
+{
+	char* pmem;
+
+	printf("sizeof(int)의 길이는 %d 입니다.\n", sizeof(int));
+	pmem = calloc(100,sizeof(int));
+	if (pmem == NULL)
+	{
+		puts("메모리를 할당할 수 없습니다.");
+	}
+	else
+	{
+		puts("정수형 변수 100개를 저장할 버퍼가 할당되었습니다.");
+		free(pmem);
+	}
+}
+#endif
+#if 0 // 098 메모리 해제하기(free)
+#include<stdio.h>
+#include<stdlib.h>
+#include<malloc.h>
+
+#define MEGA 1024 * 1024
+
+void main()
+{
+	int i;
+	char* pmem;
+
+	for (i = 0; i < 10; i++)
+	{
+		pmem = malloc(MEGA);
+
+		if (pmem == NULL)
+		{
+			puts("메모리를 할당할 수 없습니다.");
+		}
+		else
+		{
+			puts("메모리를 1MB 할당하였습니다.");
+
+			free(pmem);
+
+			puts("메모리를 해제하였습니다.");
+		}
+	}
+}
+#endif
+#if 0 // 099 메모리 재할당하기(realloc)
+#include<stdio.h>
+#include<stdlib.h>
+#include<malloc.h>
+
+void main()
+{
+	char* pmem;
+
+	pmem = malloc(100);
+
+	if (pmem == NULL)
+	{
+		puts("메모리를 할당할 수 없습니다.");
+	}
+	else
+	{
+		printf("할당된 메모리 길이는 %d바이트입니다.\n", _msize(pmem));
+
+		pmem = realloc(pmem, 200);
+
+		if (pmem == NULL)
+		{
+			puts("메모리를 재할당할 수 없습니다.");
+		}
+		else
+		{
+			printf("재할당된 메모리 길이는 %d바이트입니다. \n", _msize(pmem));
+		}
+		free(pmem);
+	}
+}
+
+#endif
+#if 0 // 100 메모리 복사하기(memcpy)
+#include<stdio.h>
+#include<string.h>
+
+struct tagM1
+{
+	int x;
+	int y;
+	char buffer[30];
+};
+void main()
+{
+	struct tagM1 x1, x2;
+
+	x1.x = 5;
+	x1.y = 10;
+	strcpy_s(x1.buffer,sizeof("memory copy")  ,"memory copy");
+	memcpy_s(&x2,sizeof(x2), &x1, sizeof(x1));
+	
+	puts(x2.buffer);
+}
+#endif
