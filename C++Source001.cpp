@@ -489,5 +489,366 @@ int main()
 	
 	return 0;
 }
+#endif
+
+#if 0 //018 
+#include <iostream>
+using namespace std;
+
+class Point
+{
+private:
+	int x;
+	int y;
+public:
+	Point();
+	Point(int _x, int _y);
+	Point(const Point& pt);                     //래퍼런스 변수는 선언과 동시에 초기화해야함
+
+	~Point();
+public:
+	void SetPoint(int _x, int _y);
+	void AddPoint(Point& pt);
+	void SubPoint(Point& pt);
+	void MovePoint(int addX, int addY);
+	void ShowPoint();
+};
+
+Point::Point(const Point& pt)
+{
+	cout << "복사 생성자 호출" << endl;
+	x = pt.x;
+	y = pt.y;
+}
+
+Point::Point()
+{
+	x = 0;
+	y = 0;
+	cout << "생성자호출" << endl;
+}
+
+Point::Point(int _x, int _y)
+{
+	x = _x;
+	y = _y;
+	cout << "매개변수있는 생성자 호출" << endl;
+}
+
+Point::~Point()
+{
+	cout << "소멸자호출" << endl;
+}
+
+void Point::SetPoint(int _x, int _y)
+{
+	x = _x;
+	y = _y;
+}
+
+void Point::AddPoint(Point& pt)
+{
+	x += pt.x;
+	y += pt.y;
+}
+
+void Point::SubPoint(Point& pt)
+{
+	x -= pt.x;
+	y -= pt.y;
+}
+
+void Point::MovePoint(int addX, int addY)
+{
+	x += addX;
+	y += addY;
+}
+
+void Point::ShowPoint()
+{
+	cout << "x, y : [" << x << ", " << y << "]" << endl;
+}
+
+int main()
+{
+	//   Point pt(100, 100), pt1(30, 30);
+	//   pt.AddPoint(pt1);
+	//   pt.ShowPoint();
+	//   pt.SubPoint(pt1);
+	//   pt.ShowPoint();
+	//   pt.MovePoint(100, 100);
+	//   pt.ShowPoint();
+
+	//   Point pt(100, 100);
+	//   Point pt1 = pt;
+	//   pt1.ShowPoint();
+	//   Point pt2(pt);
+	//   pt2.ShowPoint();
+
+	int i = 10;
+	int k = i;
+	Point t;
+	Point pt(100, 200);         //함수 오버로딩
+	Point pt1 = pt;
+	//   pt1.x = 300;            //허가권 없음, 안됨, Point::으로 시작하는 애들은 허가권 있음.
+	//   cout<<"pt.x"<<
+
+
+
+}
+#endif
+
+#if 0 //019 복사 생성자.(망함.) 
+#include<iostream>
+#pragma warning(disable:4996)
+using namespace std;
+class Point
+{
+private:
+	char* Name;
+	int x;
+	int y;
+public:
+	Point(char* _Name, int _x, int _y);
+	Point(const Point& pt);
+	Point& operator=(const Point& pt);
+	~Point();
+public:
+	void SetPoint(int _x, int _y);
+	void AddPoint(Point& pt);
+	void SubPoint(Point& pt);
+	void MovePoint(int addX, int addY);
+	void ShowPoint();
+};
+//Point& operator=(Point&a,Point&)
+Point::Point(char* _Name, int _x, int _y)
+{
+	Name = new char[strlen(_Name) + 1];
+	memset(Name, 0, strlen(_Name) + 1);
+	x = _x;
+	y = _y;
+	cout << "매개변수 있는 생성자호출" << endl;
+}
+Point::Point(const Point& apt)
+{
+	if (apt.Name)
+	{
+		Name = new char[strlen(apt.Name) + 1];
+		memset(Name, 0, strlen(apt.Name) + 1);
+		strncpy(Name, apt.Name, strlen(apt.Name));
+	}
+	x = apt.x;
+	y = apt.y;
+	cout << "복사 생성자 호출" << endl;
+}
+
+Point& Point::operator=(const Point& apt)
+{
+	if (strlen(Name) < strlen(apt.Name))
+	{
+		delete[] Name;
+		Name = new char[strlen(apt.Name) + 1];
+		memset(Name, 0, strlen(apt.Name) + 1);//0으로 초기화
+		strncpy(Name, apt.Name, strlen(apt.Name));
+	
+		goto next;
+	}
+	memset(Name, 0, strlen(apt.Name) + 1);
+	strncpy(Name, apt.Name, strlen(apt.Name));
+next:
+	x = apt.x;
+	y = apt.y;
+	//cout << "복사 생성자 호출" << endl;
+	cout << "연산자 재정의" << endl;
+	return *this;
+}
+Point::~Point()
+{
+	delete[] Name;
+	cout << "소멸자 호출" << endl;
+}
+void Point::AddPoint(Point& pt)
+{
+	x += pt.x;
+	y += pt.y;
+}
+void Point::SubPoint(Point& pt)
+{
+	x -= pt.x;
+	y -= pt.y;
+}
+void Point::MovePoint(int addX,int addY)
+{
+	x += addX;
+	y += addY;
+}
+void Point::ShowPoint()
+{
+	cout << "x, y : [" << x << ", " << y << "]" << endl;
+}
+void main()
+{
+	Point pt((char*)"고르바초프 동무", 100, 100);
+	Point pt1 = pt;
+	pt1 = pt;
+	pt1.ShowPoint();
+	Point t;
+	t = pt + pt1;
+	t.ShowPoint();
+
+}
+#endif
+#if 0 // 020 static 멤버
+#include<iostream>
+#pragma warning(disable:4996)
+using namespace std;
+#define NAME_LEN 30
+
+class Theater
+{
+private:
+	char* m_strName;
+	static int m_nViewerCount;
+	//static은 글로벌 영역에 잡히기 떄문에 두 변수가 있지만 sizeof로 이건 4바이트 나옴.
+	int localView{ 0 };
+public:
+	Theater(char* _Name)
+	{
+		this->m_strName = new char[NAME_LEN];
+		memset(m_strName, 0, NAME_LEN);
+		strcpy(m_strName, _Name);
+	}
+	Theater(const Theater& theater)
+	{
+		m_strName = new char[NAME_LEN];
+		memset(m_strName, 0, NAME_LEN);
+		memcpy(m_strName, theater.m_strName, NAME_LEN);
+	}
+	~Theater()
+	{
+		delete[]m_strName;
+	}
+	static void AddViewerCount()
+	{
+		m_nViewerCount++;
+	}
+	int GetlocalCount()
+	{
+		m_nViewerCount++;
+		localView++;
+	}
+	static int GetViewerCount()
+	{
+		return m_nViewerCount;
+	}
+};
+int Theater::m_nViewerCount = 0;
+//static 이기때문에 외부에서 오픈해줘야 쓸 수있다. 초기화도 이렇게 전역 영역에 해야함.
+//static 이면 객체가 없어도 접근할 수 있다.
+void main()
+{
+	//Theater::AddViewerCount();
+	//Theater::GetlocalCount();
+	//Theater::m_nViewerCount;
+	Theater test((char*)"대지극장");
+	test.GetlocalCount();
+	test.AddViewerCount();
+	cout << "관객수 : " << Theater::GetViewerCount() << "명" << endl;
+	Theater theater1((char*)"단성사");
+	Theater theater2((char*)"서울극장");
+	Theater theater3((char*)"명동CGV");
+	printf("%d\n", sizeof(Theater));
+	for (int i = 0; i < 1000000; i++)
+		theater1.AddViewerCount();
+	for (int i = 0; i < 1500000; i++)
+		theater2.AddViewerCount();
+	for (int i = 0; i < 2000000; i++)
+		theater3.AddViewerCount();
+	cout << "관객수 : " << Theater::GetViewerCount() << "명" << endl;
+}
+#endif
+#if 0 // 021 this pointer
+#include<iostream>
+#pragma warning(disable:4996)
+using namespace std;
+#define NAME_LEN 30
+
+class Theater
+{
+private:
+	char* m_strName;
+	static int m_nViewerCount;
+	//static은 글로벌 영역에 잡히기 떄문에 두 변수가 있지만 sizeof로 이건 4바이트 나옴.
+	int localView{ 0 };
+public:
+	Theater(char* _Name)
+	{
+		this->m_strName = new char[NAME_LEN];
+		memset(m_strName, 0, NAME_LEN);
+		strcpy(m_strName, _Name);
+	}
+	Theater(const Theater& theater)
+	{
+		m_strName = new char[NAME_LEN];
+		memset(m_strName, 0, NAME_LEN);
+		memcpy(m_strName, theater.m_strName, NAME_LEN);
+	}
+	~Theater()
+	{
+		delete[]m_strName;
+	}
+	static void AddViewerCount()
+	{
+		m_nViewerCount++;
+	}
+	int GetlocalCount()
+	{
+		//m_nViewerCount++;
+		//localView++;
+		return localView;
+	}
+	void LocalCount()
+	{
+		this->localView++;
+	}
+	void LocalCountSet(int LocalView)
+	{
+		LocalView = localView;
+	}
+	static int GetViewerCount()
+	{
+		return m_nViewerCount;
+	}
+};
+int Theater::m_nViewerCount = 0;
+//static 이기때문에 외부에서 오픈해줘야 쓸 수있다. 초기화도 이렇게 전역 영역에 해야함.
+//static 이면 객체가 없어도 접근할 수 있다.
+void main()
+{
+	//Theater::AddViewerCount();
+	//Theater::GetlocalCount();
+	//Theater::m_nViewerCount;
+	//Theater test((char*)"대지극장");
+	//test.GetlocalCount();
+	//test.AddViewerCount();
+
+	cout << "관객수 : " << Theater::GetViewerCount() << "명" << endl;
+	Theater theater1((char*)"단성사");
+	Theater theater2((char*)"서울극장");
+	Theater theater3((char*)"명동CGV");
+	printf("%d\n", sizeof(Theater));
+	for (int i = 0; i < 100; i++)
+		//theater1.AddViewerCount();
+		theater1.LocalCount();
+	for (int i = 0; i < 150; i++)
+		//theater2.AddViewerCount();
+		theater2.LocalCount();
+	for (int i = 0; i < 200; i++)
+		//theater3.AddViewerCount();
+		theater3.LocalCount();
+	cout << "theater1관객수 : " << theater1.GetlocalCount() << "명" << endl;
+	cout << "theater2관객수 : " << theater2.GetlocalCount() << "명" << endl;
+	cout << "theater3관객수 : " << theater3.GetlocalCount() << "명" << endl;
+}
 
 #endif
