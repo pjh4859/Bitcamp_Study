@@ -852,3 +852,167 @@ void main()
 }
 
 #endif
+#if 0 //022 상속.
+
+#include<iostream>
+#include"ComputerEngineer.h"
+#include"Human.h"
+
+using namespace std;
+
+int main()
+{
+	ComputerEngineer comEng(32, (char*)"Tom", 3);
+	cout << "sizeof(ComputerEngineer) : " << sizeof(ComputerEngineer) << endl;
+	//comEng.m_nAge;
+	//comEng.m_nComputer;
+	comEng.c;
+	comEng.test(100);
+	cout << "comEng.gtest() : " << comEng.gtest() << endl;
+	comEng.seta(100);
+	cout << "comEng.gtest() : " << comEng.gtest() << endl;
+	Human aaa(20, (char*)"hello");
+	aaa.c = 20;
+	//aaa.seta;
+	//aaa.geta;
+	//aaa.b = 30;
+}
+#endif
+#if 0 //023 연산자 오버로딩.
+#include<iostream>
+#include"Position.h"
+
+using namespace std;
+Position operator+(int i, Position& pos)
+{
+	Position temp=pos.GetValue();
+	return temp+i;
+}
+void main()
+{
+	int i = 10;
+	Position pos(100.0, 100.0);
+	Position a(100, 100);
+	Position c;
+	++pos;
+	pos++;
+	++i;
+	c = a + pos;
+	//c = pos + i;//pos.operator+(i)
+	c = i + pos;
+	c.ShowPosition();
+
+	//pos++.ShowPosition();
+}
+#endif
+
+#if 0 //024 
+#include<iostream>
+using namespace std;
+
+bool Divide(double dividend, double divider, double& result)
+{
+	if (divider == 0)
+		return false;
+
+	result = dividend/divider;
+	return true;
+}
+int main()
+{
+	double num1, num2, result;
+
+	cout << "A/B를 연산할 2개의 수 입력:";
+	cin >> num1 >> num2;
+
+	if (Divide(num1, num2, result))
+		cout << num1 << " / " << num2 << " = " << result << endl;
+	else
+		cout << "Invalid Value!!!" << endl;
+}
+#endif
+
+#if 0 //025 try~catch 
+#include<iostream>
+using namespace std;
+
+bool Divide(double dividend, double divider, double& result)
+{
+	if (divider == 0)
+		throw false;
+
+	result = dividend / divider;
+}
+int main()
+{
+	double num1, num2, result;
+
+	cout << "A/B 를 연산할 2개의 수 입력:";
+	cin >> num1 >> num2;
+
+	try
+	{
+		Divide(num1, num2, result);
+		cout << num1 << "/" << num2 << "=" << result << endl;
+	}
+	catch (bool exception)
+	{
+		cout << "invalid Value!!!" << endl;
+	}
+	catch (int exception)
+	{
+		cout << "Invalid Value!!: " << exception << endl;
+	}
+}
+#endif
+#if 0 //026 tamplet
+#include<iostream>
+
+using namespace std;
+
+template<typename T>
+T Add(T a, T b)
+{
+	return a + b;
+}
+//double Add(double a, double b)
+//{
+//	return a + b;
+//}
+void main()
+{
+	cout << Add<int>(10, 20) << endl;
+	cout << Add<double>(3.1, 5.3) << endl;
+}
+#endif
+#if 0 //027 tamplet 2
+#include<iostream>
+#pragma warning(disable:4996)
+using namespace std;
+
+template<typename T>
+T Add(T a, T b)
+{
+	return a + b;
+}
+template<>
+char* Add(char* a, char* b)
+{
+	char* p = new char[strlen(a) + strlen(b) + 1];
+	int len = strlen(a);
+	strncpy(p, a, len);
+	int len2 = strlen(b);
+	strncpy(p + len, b, len2);
+	p[len + len2] = 0;
+	return p;
+}
+void main()
+{
+	char* p;
+	cout << Add<int>(10, 20) << endl;
+	cout << Add <double>(3.1, 5.3) << endl;
+	cout << (p = Add<char*>((char*)"아름다운", (char*)"대한민국")) << endl;
+	delete[] p;
+}
+
+#endif
