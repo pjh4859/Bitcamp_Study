@@ -1,3 +1,4 @@
+#if 0
 #pragma once
 
 class Exception
@@ -15,3 +16,4 @@ public:
 	int GetLine();
 	char* GetFileName();
 };
+#endif

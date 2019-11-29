@@ -1,3 +1,4 @@
+#if 0
 #pragma once
 template<typename T>
 class PosList
@@ -46,3 +47,4 @@ bool PosList<T>::GetPos(int index, T& pos)
 	pos = m_pArray[index];
 	return true;
 }
+#endif

@@ -1,4 +1,4 @@
-#if 0 //022 상속.
+#if 1 //022 상속.
 //구성 human.h, Human.cpp, ComputerEngineer.h, ComputerEngineer.cpp
 
 #include <iostream>
@@ -36,7 +36,6 @@ void Human::Info()
 	cout << "age:" << m_nAge << endl;
 }
 void Human::seta(int _a)
-//값 바뀌게하려고 _ 넣음.
 {
 	a = _a;
 }
@@ -44,4 +43,17 @@ int Human::geta()
 {
 	return a;
 }
+void Human::Play()
+{
+	cout << "Human Play()" << endl;
+}
+//void Human::seta(int _a)
+////값 바뀌게하려고 _ 넣음.
+//{
+//	a = _a;
+//}
+//int Human::geta()
+//{
+//	return a;
+//}
 #endif

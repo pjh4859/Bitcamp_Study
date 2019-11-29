@@ -1,3 +1,4 @@
+#if 0
 #include<iostream>
 #include"PosList.h"
 using namespace std;
@@ -29,3 +30,4 @@ void main()
 		}
 	}
 }
+#endif

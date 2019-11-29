@@ -1,4 +1,4 @@
-#if 0
+#if 1
 #pragma once
 //±¸¼º human.h, Human.cpp, ComputerEngineer.h, ComputerEngineer.cpp
 
@@ -16,11 +16,12 @@ public:
 	~Human();
 public:
 	int c;
-	void Eat();
-	void Sleep();
+	virtual void Eat();
+	virtual void Sleep();
 	void Work();
 	void Info();
 	void seta(int a);
 	int geta();
+	virtual void Play();
 };
 #endif
