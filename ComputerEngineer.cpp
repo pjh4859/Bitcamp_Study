@@ -41,7 +41,7 @@ void ComputerEngineer::Info()
 //}
 #endif
 
-#if 1
+#if 0
 #include<iostream>
 #include"ComputerEngineer.h"
 
