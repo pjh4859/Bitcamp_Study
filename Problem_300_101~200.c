@@ -609,7 +609,7 @@ void main()
 	}
 }
 #endif
-#if 1 //123 구조체 배열 포인터 사용하기
+#if 0 //123 구조체 배열 포인터 사용하기
 #include<stdio.h>
 #include<string.h>
 
@@ -622,6 +622,458 @@ struct tagAddress
 
 void main()
 {
+	struct tagAddress ad[3];
+	struct tagAddress* pad;
+	int i;
+
+	pad = ad;
+
+	for (i = 0; i < 3; i++)
+	{
+		sprintf_s(pad[i].name, sizeof(pad[i].name), "홍길동%d", i);
+		strcpy_s(pad[i].phone, sizeof(pad[i].phone),"02-9112-4545");
+		strcpy_s(pad[i].address, sizeof(pad[i].address), "서울 노원구 석계로15길");
+			
+	}
+	for (i = 0; i < 3; i++)
+	{
+		printf("이름: %s\n", pad[i].name);
+		printf("전번: %s\n", pad[i].phone);
+		printf("주소: %s\n", pad[i].address);
+	}
+}
+#endif
+#if 0 //124 구조체 배열을 함수에서 사용하기
+#include<stdio.h>
+#include<string.h>
+
+struct tagAddress
+{
+	char name[30];
+	char phone[20];
+	char address[100];
+
+};
+
+void print(struct tagAddress* pad);
+
+void main()
+{
+	struct tagAddress ad[3];
+	int i;
+
+	for (i = 0; i < 3; i++)
+	{
+		sprintf_s(ad[i].name, sizeof(ad[i].name), "박재희%d", i);
+		strcpy_s(ad[i].phone, sizeof(ad[i].phone), "010-3933-2828");
+		strcpy_s(ad[i].address, sizeof(ad[i].address), "서울 노원구 석계로15길");
+
+	}
+	print(ad);
+}
+void print(struct tagAddress* pad)
+{
+	int i;
+
+	for (i = 0; i < 3; i++)
+	{
+		printf("이름:%s\n", pad[i].name);
+		printf("전화:%s\n", pad[i].phone);
+		printf("주소:%s\n", pad[i].address);
+	}
+}
+#endif
+#if 0 //125 구조체의 길이를 구하고 초기화하기
+#include<stdio.h>
+#include<string.h>
+struct tagAddress
+{
+	char name[30];
+	char phone[20];
+	char address[100];
+
+};
+typedef struct tagAddress addr;
+
+void main()
+{
+	addr ad;
+	int len;
+
+	len = sizeof(addr);
+
+	printf("구조체 addr의 크기:%d\n", len);
+
+	memset(&ad, 0, len);
+}
+#endif
+#if 0 //126 공용체 사용하기
+#include<stdio.h>
+
+typedef union tagVariable
+{
+	int i;
+	double d;
+}VA;
+
+void main()
+{
+	VA va;
+	va.i = 5;
+	printf("va.i 공용체의 값: %d\n", va.i);
+
+	va.d = 3.14;
+
+	printf("va.d 공용체의 값: %f\n", va.d);
+	printf("va.i 공용체의 값: %d\n", va.i);
+}
+#endif
+#if 0 //127 공용체 함수에서 사용하기
+#include<stdio.h>
+typedef union tagVariavle
+{
+	int i;
+	double d;
+}VA;
+
+void print(VA* pva);
+
+void main()
+{
+	VA va;
+
+	print(&va);
+}
+void print(VA* pva)
+{
+	pva->i = 5;
+
+	printf("pva->i 공용체의 값:%d\n", pva->i);
+
+	pva->d = 3.14;
+
+	printf("pva->d 공용체의 값: %f\n", pva->d);
+	printf("pva->i 공용체의 값: %d\n", pva->i);
+}
+#endif
+#if 0 //128 void형 포인터 사용하기
+#include<stdio.h>
+
+void main()
+{
+	int i;
+	double d = 3.14;
+
+	int* pi;
+	double* pd;
+	void* pv;
+
+	pi = &i;
+	pd = &d;
+	pi = &d;
+	pv = &i;
+	pv = &d;
+
+	printf("실수 값 d:%f\n", *(double*)pv);
+}
+#endif
+#if 0 //129 void형 포인터를 함수에서 사용하기
+#include<stdio.h>
+#include<string.h>
+
+typedef struct tagPoint
+{
+	int x;
+	int y;
+}point;
+
+void My_memset(void* dest, int c, unsigned count);
+
+void main(void)
+{
+	point pt = { 5,10 };
+	char array[10];
+
+	printf("x,y: %d, %d\n", pt.x, pt.y);
+
+	My_memset(&pt, 0, sizeof(pt));
+
+	printf("x,y : %d, %d\n", pt.x, pt.y);
+
+	My_memset(array, 48, sizeof(array));
+
+	printf("array[0] ~ array[9]:%c ~ %c\n", array[0], array[9]);
+}
+
+void My_memset(void* dest, int c, unsigned count)
+{
+	while (count--)
+	{
+		*(char*)dest = c;
+		dest = (char*)dest + 1;
+	}
+}
+#endif
+#if 0 //130 포인터의 포인터 사용하기
+#include<stdio.h>
+
+void main()
+{
+	char* animal[3];
+	char** ppanimal;
+
+	animal[0] = "호랑이";
+	animal[1] = "사자";
+	animal[2] = "토끼";
+
+	ppanimal = animal;
+
+	puts(animal[0]);
+	puts(ppanimal[1]);
+	puts(ppanimal[2]);
 
 }
 #endif
+#if 0 //131 포인터의 포인터를 함수에서 사용하기
+#include<stdio.h>
+void print(char** ppanimal);
+
+void main()
+{
+	char* animal[3];
+
+	animal[0] = "호랑이";
+	animal[1] = "사자";
+	animal[2] = "토끼";
+
+	print(animal);
+}
+
+void print(char** ppanimal)
+{
+	puts(ppanimal[0]);
+	puts(ppanimal[1]);
+	puts(ppanimal[2]);
+}
+#endif
+#if 0 //132 함수 포인터 사용하기
+#include<stdio.h>
+#include<string.h>
+
+void main()
+{
+	int(*myfunc)(const char*);
+
+	myfunc = puts;
+
+	puts("올챙이가 쑥~.~");
+	myfunc("뒷다리가 쭉~.~");
+
+	myfunc = strlen;
+
+	printf("문자열의 길이:%d\n", strlen("aa"));
+	printf("문자열의 길이:%d\n", myfunc("aa"));
+}
+#endif
+#if 0 //133 함수 포인터를 배열에서 사용하기
+#include<stdio.h>
+#include<string.h>
+void main()
+{
+	int(*myfunc[3])(const char*);
+
+	myfunc[0] = puts;
+	myfunc[1] = strlen;
+	myfunc[2] = myfunc[1];
+
+	puts("올챙이가 쑥~.~");
+	myfunc[0]("뒷다리가 쭉~.~");
+
+
+	printf("문자열의 길이:%d\n", strlen("aa"));
+	printf("문자열의 길이:%d\n", myfunc[1]("aa"));
+	printf("문자열의 길이:%d\n", myfunc[2]("aa"));
+}
+#endif
+#if 0 //134 함수 포인터를 함수에서 사용하기
+#include<stdio.h>
+#include<string.h>
+
+void print1(int(*X)(const char*));
+void print2(int(*X[2])(const char*));
+
+void main()
+{
+	int (*myfunc[2])(const char*);
+
+	myfunc[0] = puts;
+	myfunc[1] = strlen;
+
+	print1(myfunc[0]);
+	print2(myfunc);
+}
+void print1(int(*X)(const char*))
+{
+	X("올챙이가 쑥!");
+}
+void print2(int(*X[2])(const char*))
+{
+	X[0]("뒷다리가 쭉!");
+	printf("문자열의 길이: %d\n", X[1]("aa"));
+}
+#endif
+#if 0 //135 main() 함수 원형 사용하기
+#include<stdio.h>
+
+int main(int argc, int* argv[])
+{
+	int i;
+
+	printf("인수의 수:%d\n", argc);
+
+	for (i = 0; i < argc;i++)
+	{
+		printf("argc[%d]: %s\n", i, argv[i]);
+	}
+}
+#endif
+#if 0 //136 파일 생성하기(fopen)
+#include<stdio.h>
+void main()
+{
+	FILE* file;
+	fopen_s(&file,"D:\\C_code\\file.txt", "w+");
+	if (file == NULL)
+	{
+		puts("파일을 생성할 수 없습니다.");
+	}
+	else
+	{
+		puts("파일이 정상적으로 생성되었습니다.");
+		fclose(file);
+	}
+}
+#endif
+#if 0 //137 파일에 한 문자 쓰기(fputc)
+#define _CRT_SECURE_NO_WARNINGS
+#include<stdio.h>
+void main()
+{
+	FILE* fp;
+	fp= fopen("D:\\C_code\\file.txt", "w+");
+	if (fp == NULL)
+	{
+		puts("파일을 생성할 수 없습니다.");
+	}
+	else
+	{
+		fputs("A", fp);
+		puts("문자 'A'를 파일에 저장했다.");
+		fclose(fp);
+	}
+}
+#endif
+#if 0 //138 파일에서 한 문자 읽기(fgetc)
+#include<stdio.h>
+void main()
+{
+	FILE* fp;
+	int ch;
+
+	fopen_s(&fp,"D:\\C_code\\file.txt", "r");
+	if (fp == NULL)
+	{
+		puts("파일을 생성할 수 없습니다.");
+	}
+	else
+	{
+		ch = fgetc(fp);
+		printf("읽은 문자:%c \n", ch);
+		fclose(fp);
+	}
+}
+#endif
+#if 0 //139 파일에 문자열 쓰기(fputs)
+#include<stdio.h>
+void main()
+{
+	FILE* fp;
+
+	fopen_s(&fp, "D:\\C_code\\file.txt", "w+");
+
+	if (fp == NULL)
+	{
+		puts("파일을 생성할 수 없습니다.");
+	}
+	else
+	{
+		fputs("대한민국\n짝작\n", fp);
+		fclose(fp);
+	}
+}
+#endif
+#if 0 //140 파일에서 문자열 읽기(fgets)
+#include<stdio.h>
+void main()
+{
+	FILE* fp;
+	char buffer[100];
+
+	fopen_s(&fp, "D:\\C_code\\file.txt", "r");
+
+	if (fp == NULL)
+	{
+		puts("파일을 생성할 수 없습니다.");
+	}
+	else
+	{
+		fgets(buffer, 100, fp);//개행문자를 만나면 그만읽음.
+		puts(buffer);
+		fclose(fp);
+	}
+}
+#endif
+#if 0 //141 파일에 형식화된 문자열 쓰기(fprintf)
+#include<stdio.h>
+void main()
+{
+	FILE* fp;
+	int i = 12345;
+
+	fopen_s(&fp, "D:\\C_code\\file.txt", "w+");
+
+	if (fp == NULL)
+	{
+		puts("파일을 생성할 수 없습니다.");
+	}
+	else
+	{
+		fprintf(fp, "%d", i);
+		fclose(fp);
+	}
+
+}
+#endif
+#if 0 //142 파일에서 형식화된 문자열 읽기(fscanf)
+#include<stdio.h>
+void main()
+{
+	FILE* fp;
+	int i;
+
+	fopen_s(&fp, "D:\\C_code\\file.txt", "r");
+
+	if (fp == NULL)
+	{
+		puts("파일을 생성할 수 없습니다.");
+	}
+	else
+	{
+		fscanf_s(fp, "%d", &i);
+		//fscanf(fp, "%d", &i);
+		printf("i=%d\n", i);
+		fclose(fp);
+	}
+}
+#endif
+#if 1 //143 
