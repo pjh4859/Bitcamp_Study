@@ -2256,6 +2256,7 @@ int main()
 }
 #endif
 #if 0 //062
+//C에서는 (type *)
 //static_cast
 //reinterpret_cast
 //comst_cast
@@ -2272,7 +2273,7 @@ static_cast		정수와 실수 사이의 변환, 열거형과 정수 사이 변환
 reinterpret_cast	서로 다른 포인터 타입 끼리의 변환			
 					정수와 포인터 사이의 변환				  
 --------------------------------------------------------- 
-const_cast		포인터와 참조형의 상수성과					  
+const_cast		포인터와 참조형의 상수성(const)과					  
 				volatile속성을 제거하는데 사용			     
 --------------------------------------------------------- 
 dynamic_cast	안전한 다운 캐스팅(클래스 포인터를 안전하게 파생
@@ -2309,6 +2310,640 @@ int main()
 	double* p1 = reinterpret_cast<double*>(&n);
 
 	int* p2 = reinterpret_cast<int*>(10);
+}
+#endif
+#if 0 //062(3)
+//const_cast
+/*
+1. const_cast
+	=>포인터 변수와 참조 변수 사이의 상수성(const)와 volatile
+	속성을 제거하기 위해 캐스팅
+*/
+int main()
+{
+	const int c = 10;
+	volatile int v = 20;//항상 메모리를 접근해서 값 가져오는거.
+	int* p = &c; //error
+	int* p1 = const_cast<int*>(&c);//상수성 제거
+	int* p2 = &v; //error
+	int* p2 = const_cast<int*>(&v); //volatile 제거
 
+	double* p3 = const_cast<double*>(&c);//error type이 달라서
+}
+#endif
+#if 0 //062(4)
+//const int 형 변수의 주소를 char* 변수에 담아보자
+int main()
+{
+	const int c = 10;
+
+	char* p = static_cast<char*>(&c);//error
+	char* p = const_cast<char*>(&c);//error
+	int* p = const_cast<int*>(&c);
+	char* p = reinterpret_cast<char*>(const_cast<int*>(&c));
+	char* p2 = (char*)&c;
+}
+#endif
+#if 0 //062(5)
+#include<cstdlib>
+int main()
+{
+	int* p1 = (int*)malloc(sizeof(int) * 10);
+	int* p1 = static_cast<int*>(malloc(sizeof(int) * 10));
+	free(p1);
+
+	int* p2 = new int;
+	delete p2;
+
+	int* p3 = new int[10];
+	delete[]p3;
+
+	int* p4 = new int[10][2];
+	int(*p4)[2] = new int[10][2];
+	int* p4 = reinterpret_cast<int*>(new int[10][2]);
+	delete[]p4;
+}
+#endif
+#if 0 //063
+/*
+nullptr
+1.C++11 부터 도입된 새로운 키워드(keyword)
+2.널 포인터값(null pointer value)을 나타내는 "포인터 리터럴(pointer literal)"
+3.포인터 변수를 초기화 하기 위해 기존의 방식대로 "0을 사용해도 되지만
+nullptr를 사용하는것" 이 안전하고 코드의 가독성을 높일 수 있다.
+*/
+int main()
+{
+	int* p1 = 0;
+	int* p2 = nullptr;
+}
+#endif
+#if 0 //063(2)
+/*
+1.0은 정수,실수,bool,포인터 등의 변수를 초기화 할 때 사용가능.
+2.0은 정수형 literal 이고 int 타입
+	=>0은 int 타입이지만, 실수,bool,포인터 타입으로
+	암시적 형 변환될 수 있다.
+*/
+#include<iostream>
+using namespace std;
+void foo(int n) { cout << "int" << endl; }
+void foo(double b) { cout << "double" << endl; }
+void foo(bool d) { cout << "bool" << endl; }
+void foo(char* s) { cout << "char" << endl; }
+void foo2(double* t) { cout << "double*" << endl; }
+int main()
+{
+	int n = 0;
+	double b = 0;
+	bool d = 0;
+	char* s = 0;
+	double* t = 0;
+	foo(0);
+	foo(0.0);
+	foo(false);
+	foo((char*)0);
+	foo(nullptr);//포인터 값에 들어가서 char* 에 들어가는듯
+}
+#endif
+#if 0 //063(3)
+#include<iostream>
+int* foo() { return 0; }
+int main()
+{
+	auto ret = foo();
+
+	//if (ret == 0)//ret가 포인터 값인지 정수 값인지 알 수가 없다.
+	if(ret==nullptr)// 포인터 값이라면 처음부터 nullptr 로 하면 좋을듯.
+	{
+
+	}
+}
+#endif
+#if 0 //063(4)
+//nullptr과 데이터 타입
+/*
+1.nullptr 은 "std::nullptr_t"타입
+2.std::nullptr_t 타입은 모든 타입의 포인터로 암시적 변환 된다.
+3.std::nullptr_t 타입은 int 타입으로 변환 될 수 없다.
+4.srd::nullptr_t 타입은 bool 타입으로 직접 초기화(direc initialization)시
+초기화 값으로 사용이 가능하다.
+*/
+#include<iostream>
+int main()
+{
+	0;//int
+	0.0;//double
+	nullptr; //std::nullptr_t 포인터 타입이 아닌데 포인터의 초기화 값으로 사용되고 있다.
+	int* p1 = nullptr;
+	void(*f)() = nullptr;
+	int n1 = nullptr;
+	int n2 = 0;
+
+	bool b1 = nullptr;//직접초기화가 아님
+	bool b2(nullptr);
+	bool b3{ nullptr };
+	bool b4={nullptr};//직접초기화가 아님
+}
+#endif
+#if 0 //063(5)
+#include<iostream>
+using namespace std;
+void foo(int n) { cout << "int" << endl; }
+void foo(void* n) { cout << "void*" << endl; }
+void goo(char* n) { cout << "goo" << endl; }
+#ifdef __cplusplus
+	#define NULL 0 //c++에서는 0이 여러 타입으로 자동으로 변환댐
+#else
+	#define NULL (void*)0
+#endif
+#define DDD 10
+#ifdef DDD
+	#define DD 20
+#else
+	#define DD 30
+#endif
+
+int main()
+{
+	foo(0); //int
+	foo((void*)0); //void*
+	foo(NULL);
+	goo(NULL);
+	printf("%d", DD);
+}
+#endif
+#if 0 //064
+/*
+1.현실세계에 존재하는 것들
+	복소수 --> double 형 변수 2개
+	날짜	  --> int형 변수 3개
+	사람   --> char* name; int age;
+
+2. Complex, Date, Person 이라는 타입이 있다면 편리하지않을까?
+=>C언어의 구조체를 사용하면 새로운 타입을 만들 수 있다.
+*/
+#include<stdio.h>
+void add(double ar, double ai, double br, double bi, //in parameter
+	double*sr,double *si)  //out parameter
+{
+	//double sr = ar + br;
+	//double si = ai + bi;
+	*sr = ar + br;
+	*si = ai + bi;
+}
+int main()
+{
+	double xr = 1, xi = 1; //1+1i;
+	double yr = 2, yi = 2; //2+2i;
+	double sr, si;
+	add(xr, xi, yr, yi,&sr, &si);
+}
+#endif
+#if 0 //064(2)
+/*
+1. 프로그램에서 필요한 타입을 먼저 설계한다.
+2. 현실세계에 존재하는 사물은 상태와 동작이 있다.
+			상태			동작
+자동차		색상,속도		달린다,멈춘다
+사람			나이,몸무게	웃는다,운다
+복소수		실수,허수		더하기,절대값 구하기
+
+3. 타입을 설계할 때.
+=>상태와 동작을 표현할 수 있어야한다.
+=>상태는 변수로 동작은 함수로 표현된다.
+
+4. C의 구조체와 C++의 구조체
+=> C: 데이터만 포함 할 수 있다.
+=> C++: 데이터 뿐 아니라 함수도 포함할 수 있다. 
+*/
+struct Complex
+{
+	double real;
+	double image;
+};
+Complex add(Complex c1, Complex c2)
+{
+	Complex temp;
+	temp.real = c1.real + c2.real;
+	temp.image = c1.image + c2.image;
+	return temp;
+}
+int main()
+{
+	Complex c1 = { 1,1 }; //1+1i
+	Complex c2 = { 2,2 }; //2+2i
+
+	Complex ret = add(c1, c2);
+}
+#endif
+#if 0 //064(3)
+#include<iostream>
+int buf[10];
+int idx = 0;
+//void push(int* buf, int* idx, int value)
+//{
+//	buf[(*idx)++] = value;
+//}
+//int pop(int* buf, int* idx)
+//{
+//	return buf[--(*idx)];
+//}
+//struct Stack
+//{
+//	int buf[10];
+//	int idx;
+//};
+//void push(Stack* s, int value)
+//{
+//	s->buf[s->idx++] = value;
+//}
+//int pop(Stack* s)
+//{
+//	return s->buf[--(s->idx)];
+//}
+struct Stack
+{
+private:
+	//int buf[10];
+	int* buf;
+	int idx;
+public:
+	//void init() { idx = 0; }
+	Stack(int size = 10) {
+		idx = 0;
+		buf = new int[size];
+	}
+	~Stack() { delete[] buf; }
+	void push(int value){buf[idx++] = value;}
+	int pop(){return buf[--(idx)];}
+};
+int main()
+{
+	Stack s1(30);
+	Stack s2;
+	//s1.idx = 0;
+	//s2.idx = 0;
+	s1.push(10);
+	s1.push(20);
+	s1.push(30);
+	//int buf1[10];
+	//int idx1 = 0;
+	/*push(10);
+	push(20);
+	push(30);*/
+	/*push(buf1, &idx1, 10);
+	push(buf1, &idx1, 20);
+	push(buf1, &idx1, 30);*/
+	
+
+	std::cout << s1.pop() << std::endl;
+	std::cout << s1.pop() << std::endl;
+
+	//int n1 = pop(&s1);
+	
+}
+#endif
+#if 0 //064(4)
+#include"Stack.h"
+#include<iostream>
+
+int main()
+{
+	Stack s1(30);
+	Stack s2(10);	
+	s1.push(10);
+	s1.push(20);
+	s1.push(30);
+
+	std::cout << s1.pop() << std::endl;
+	std::cout << s1.pop() << std::endl;
+}
+#endif
+#if 0 //064(5)
+#include<iostream>
+int buf[10];
+int idx = 0;
+template<typename T>
+struct Stack
+{
+private:
+	T* buf;
+	int idx;
+public:
+	Stack(int size = 10) {
+		idx = 0;
+		buf = new T[size];
+	}
+	~Stack() { delete[] buf; }
+	void push(T value) { buf[idx++] = value; }
+	T pop() { return buf[--(idx)]; }
+};
+int main()
+{
+	Stack<int> s1(30);
+	Stack<double> s2;
+
+	s1.push(10);
+	s1.push(20);
+	s1.push(30);
+
+	std::cout << s1.pop() << std::endl;
+	std::cout << s1.pop() << std::endl;
+}
+#endif	
+#if 0 //065
+//변수와 객체(variable vs object)
+/*
+1. 변수(variable)
+	=>변하는 수
+	=>메모리의 특정 위치를 가리키는 이름
+	=>변수를 사용하면 메모리의 값을 읽거나 쓸 수 있다.
+	=>언어가 제공하는 기본 타입(primitive type)의 인스턴스
+2. 객체(object)
+	=>메모리를 할당하고 자신을 스스로 초기화 한다.
+	=>상태와 동작을 가지고 있는 존재
+	=>객체를 사용하면 해당 객체가 제공하는 다양한 서비스를 사용 할 수 있다.
+	=>사용자 정의 타입(user define type)으로 만든 변수
+
+프로그래밍 패러다임(paradigm)
+프로그램이란 무엇인가?
+1.명령형(절차적) 프로그래밍 패러다임(C언어)
+	=>프로그램은 컴퓨터가 수행할 명령어들의 나열이다.
+	=>모든 프로그램은 main 함수부터 순차적으로 실행된다
+	=>제어문, 반복문, 함수 등을 사용해서 실행흐름을 변경할수 있다.
+
+2. 객체지향 프로그래밍 패러다임(C++, JAVA, Python...)
+	=>프로그램은 객체들과 객체들 사이의 메시지 이다.
+	=>문제를 해결하기 위해 필요한 타입을 찾아내고 설계 한 후
+	객체를 생성하고, 객체끼리 메시지를 주고 받으면서 문제를 해결 하는 것.
+
+C++과 프로그래밍 패러다임
+1. C++은 다중 패러다임(Multi Paradigm) 언어다.
+	=>명령형(절차적) 프로그래밍 패러다임 지원
+	=>객체 지향 프로그래밍 패러다임 지원
+	=>일반화 프로그래밍 패러다임 지원
+	=>함수형 프로그래밍 패러다임 지원
+*/
+#endif
+#if 0 //065(2)
+#include<iostream>
+#include<stack>
+
+int main()
+{
+	std::stack<int> s;
+
+	s.push(10);
+	s.push(20);
+	s.push(30);
+
+	std::cout << s.top() << std::endl;
+	s.pop();
+	std::cout << s.top() << std::endl;
+}
+#endif
+#if 0 //066
+#include<iostream>
+#include<vector>
+#include<list>
+int main()
+{
+	//int x[10]={1,2,3,4,5,6,7,8,9,10}
+	//std::vector<int>x;
+	//std::vector<int> x(10);
+	std::list<int> x = { 1,2,3,4,5,6,7,8,9,10 };
+	//x[0] = 10;
+	//x.resize(20);
+	//for (int i = 0; i < x.size(); i++)
+	//	std::cout << x[i] << std::endl;
+	for (auto n : x)
+		std::cout << n << std::endl;
+}
+#endif
+#if 0 //066(2)
+//friend 함수
+/*
+1. friend 함수 
+	=>멤버 함수는 아니지만 private 멤버에 접근 할 수 있게 하고 싶을 때.
+2.왜 멤버 함수로 만들지 않았는가?
+	=>멤버 함수로 만들 수 없는 경우가 있다.(연산자 재정의)
+	Point a,b,c;
+	int i=10;
+	c=a+b; a.operator+(b)
+	c=i+a; operator+(i,a);//friend 함수가 필요하다
+*/
+#include<iostream>
+class Airplane
+{
+	int color;
+	int speed;
+	int engineTemp;
+
+public:
+	int getSpeed() { return speed; }
+	friend void fixAirplane(Airplane& a);
+//	int getengineTemp() { return engineTemp; }
+};
+void fixAirplane(Airplane& a)
+{
+	int n = a.engineTemp;
+}
+int main()
+{
+	Airplane a;
+	//a.color = 1;
+	fixAirplane(a);
+}
+#endif
+#if 0 //066(3)
+/*
+
+*/
+#include<iostream>
+using namespace std;
+class Point
+{
+	int x, y;
+public:
+	Point() { x = 0; y = 0; cout << "1" << endl; }
+	Point(int a, int b) { x = a; y = b; cout << "2" << endl; }
+};
+int main()
+{
+	//Point p1(1, 2);		//2
+	//Point p2{ 1, 2 };		//2,C++직접초기화
+	//Point p3 = { 1, 2 };	//2,	복사초기화
+
+	//Point p4;		//1
+	//Point p5();		//객체생성 아님, 함수 선언문
+	//Point p6{};		//1
+	//Point p7 = {};	//1
+
+	//Point p8[3];
+	//Point p9[3] = { Point(1,1), };
+	//Point p10[3] = { {1,1},{2,2} };
+	
+	Point* p11;
+
+	p11 = static_cast<Point*>(malloc(sizeof(Point)));
+	free(p11);
+	p11 = new Point;
+	delete p11;
+
+	p11 = new Point(1, 2);
+	delete p11;
+}
+#endif
+#if 0 //066(4)
+#include<iostream>
+using namespace std;
+class Point
+{
+	int x, y;
+public:
+	Point() { cout << "Point()" << endl; }
+	~Point() { cout << "~Point()" << endl; }
+};
+class Rect
+{
+	Point p1;
+	Point p2;
+public:
+	Rect(){ cout << "Rect()" << endl; }
+	~Rect() { cout << "Point()" << endl; }
+};
+int main()
+{
+	Rect r;
+}
+#endif
+#if 0 //067
+/*
+위임 생성자(delegate constructor)
+*/
+class Point
+{
+	int x, y;
+public:
+	Point() :Point(0, 0) {}
+	//{x = 0; y = 0;}
+	Point(int a, int b)
+	{x = a; y = b;}
+};
+int main()
+{
+	Point p1;
+	Point p2(1, 2);
+}
+#endif
+#if 0 //067(2)
+/*
+default constructor
+1. Point() =default;
+	=>컴파일러에게 디폴트 생성자를 만들어 달라고 하는 문법
+	=>클래스 선언부만 표기하면 되고 구현부는 만들지 않아도 된다.
+
+constructor delete
+2. Point()=delete;
+	=>인자 없는 객체를 만들지 못하게 할 때 사용
+*/
+class Point
+{
+	int x, y;
+public:
+	Point() = default;
+	//Point() =delete;
+	Point(int a, int b)	{}
+};
+int main()
+{
+	Point p1;
+	Point p2(1, 2);
+}
+#endif
+#if 0 //068
+/*
+소멸자(destructor)
+1. 소멸자 모양
+	=> ~클래스이름()
+	=>리턴 타입을 표기하지 않는다.
+	=>인자를 가질 수 없다. -한개만 만들수 있다.
+
+2. 특징
+	=>객체를 생성하면 생성자가 호출되고
+	=>객체가 파괴되면 소멸자가 호출된다.
+3. 소멸자를 만들지 않으면
+	=>컴파일러가 소멸자를 제공해준다.
+
+4. 소멸자가 필요한 경우
+	=>생성자 등에서 자원을 할당한 경우, 소멸자에서 자원을 해지 해야한다.
+	=>자원해지등이 필요 없는 경우 소멸자를 만들 필요는 없다.
+*/
+#include<stdio.h>
+#pragma warning(disable:4996)
+int main()
+{
+	FILE* f = fopen("D:\\C_code\\a.txt", "wt");
+
+	fputs("hi", f);
+	fclose(f);
+}
+#endif
+#if 0 //068(2)
+#include<iostream>
+#include<cstdio>
+#include<string>
+#pragma warning(disable:4996)
+class File
+{
+	FILE* file = 0;
+public:
+	File(std::string filename, std::string mode)
+	{
+		file = fopen(filename.c_str(), mode.c_str());
+	}
+	//RW 함수들 정의
+	void puts(std::string s)
+	{
+		fputs(s.c_str(), file);
+	}
+	~File()
+	{
+		fclose(file);
+	}
+};
+int main()
+{
+	//std::string test = "skywalk";
+	File f("D:\\C_code\\a.txt", "wt");
+	f.puts("hello~~~skywalker");
+}
+#endif
+#if 1 //069
+/*
+-member initializer list
+*/
+#include<iostream>
+class Point
+{
+	int x; int y;
+	const int cval;
+	int& r;
+public:
+	Point(int a, int b,int val,int c):cval(val),r(c)
+	{
+		x = a; y = b;
+		//cval = val;
+	}
+};
+int main()
+{
+	int i = 10;
+	Point p(1, 2, 3, i);
+	int a = 0;
+	int b;
+	b = 0;
+	int& r = a;
 }
 #endif

@@ -1076,4 +1076,987 @@ void main()
 	}
 }
 #endif
-#if 1 //143 
+#if 0 //143 파일의 버퍼 비우기(fflush)
+#include<stdio.h>
+
+void main()
+{
+	FILE* fp;
+	fopen_s(&fp, "D:\\C_code\\file.txt", "w+");
+
+	if (fp == NULL)
+	{
+		puts("파일을 생성할 수 없습니다.");
+	}
+	else
+	{
+		fputs("대한민국rr", fp);
+		fflush(fp);
+		fclose(fp);
+	}
+}
+#endif
+#if 0 //144 파일 포인터의 현재 위치 구하기 1(ftell)
+#include<stdio.h>
+void main()
+{
+	FILE* fp;
+
+	fopen_s(&fp, "D:\\C_code\\file.txt", "w+");
+
+	if (fp == NULL)
+	{
+		puts("파일을 생성할 수 없습니다");
+	}
+	else
+	{
+		printf("파일 포인터의 위치:%d\n", ftell(fp));
+		fputs("abcdaksjhdfjkdsjf", fp);
+		printf("파일 포인터의 위치:%d\n", ftell(fp));
+		fclose(fp);
+	}
+}
+#endif
+#if 0 //145 파일 포인터를 처음으로 이동하기 1(fseek)
+#include<stdio.h>
+void main()
+{
+	FILE* fp;
+
+	fopen_s(&fp, "D:\\C_code\\file.txt", "w+");
+	
+	if (fp == NULL)
+	{
+		puts("파일을 생성할 수 없습니다");
+	}
+	else
+	{
+		printf("파일 포인터의 위치:%d\n", ftell(fp));
+		fputs("abcdaksjhdfjkdsjf", fp);
+		printf("파일 포인터의 위치:%d\n", ftell(fp));
+		fseek(fp, 0L, SEEK_SET);
+		printf("파일 포인터의 위치:%d\n", ftell(fp));
+		fclose(fp);
+	}
+}
+#endif
+#if 0 //146 파일 포인터를 처음으로 이동하기 2(rewind)
+#include<stdio.h>
+void main()
+{
+	FILE* fp;
+
+	fopen_s(&fp, "D:\\C_code\\file.txt", "w+");
+
+	if (fp == NULL)
+	{
+		puts("파일을 생성할 수 없습니다");
+	}
+	else
+	{
+		printf("파일 포인터의 위치:%d\n", ftell(fp));
+		fputs("abcdaksjhdfjkdsjf", fp);
+		printf("파일 포인터의 위치:%d\n", ftell(fp));
+		rewind(fp);
+		printf("파일 포인터의 위치:%d\n", ftell(fp));
+		fclose(fp);
+	}
+}
+#endif
+#if 0 //147 파일 포인터를 끝으로 이동하기(fseek)
+#include<stdio.h>
+void main()
+{
+	FILE* fp;
+
+	fopen_s(&fp, "D:\\C_code\\file.txt", "w+");
+
+	if (fp == NULL)
+	{
+		puts("파일을 생성할 수 없습니다");
+	}
+	else
+	{
+		printf("파일 포인터의 위치:%d\n", ftell(fp));
+		fputs("abcdaksjhdfjkdsjf", fp);
+		printf("파일 포인터의 위치:%d\n", ftell(fp));
+		rewind(fp);
+		printf("파일 포인터의 위치:%d\n", ftell(fp));
+		fseek(fp, 0L, SEEK_END);
+		printf("파일 포인터의 위치:%d\n", ftell(fp));
+		fclose(fp);
+	}
+}
+#endif
+#if 0 //148 파일 포인터를 임의의 위치로 이동하기(fseek)
+#include<stdio.h>
+void main()
+{
+	FILE* fp;
+
+	fopen_s(&fp, "D:\\C_code\\file.txt", "w+");
+
+	if (fp == NULL)
+	{
+		puts("파일을 생성할 수 없습니다");
+	}
+	else
+	{
+		fputs("abcdaksjhdfjkdsjf", fp);
+		printf("파일 포인터의 위치:%d\n", ftell(fp));
+		fseek(fp, -2L, SEEK_CUR);
+		printf("파일 포인터의 위치:%d\n", ftell(fp));
+		fclose(fp);
+	}
+}
+#endif
+#if 0 //148(2) 파일 포인터를 임의의 위치로 이동하기(fseek)
+#include<stdio.h>
+void main()
+{
+	FILE* fp;
+
+	fopen_s(&fp, "D:\\C_code\\file.txt", "a+");
+
+	if (fp == NULL)
+	{
+		puts("파일을 생성할 수 없습니다");
+	}
+	else
+	{
+		printf("파일 포인터의 위치:%d\n", ftell(fp));
+		fseek(fp, 0L, SEEK_END);
+		fputs("재재보고싶다", fp);
+		printf("파일 포인터의 위치:%d\n", ftell(fp));
+		fclose(fp);
+	}
+}
+#endif
+#if 0 //149 파일의 길이 구하기(fseek)
+#include<stdio.h>
+void main()
+{
+	FILE* fp;
+
+	fopen_s(&fp, "D:\\C_code\\file.txt", "r");
+
+	if (fp == NULL)
+	{
+		puts("파일을 생성할 수 없습니다");
+	}
+	else
+	{
+		fseek(fp, 0L, SEEK_END);
+		printf("파일의 길이:%d\n", ftell(fp));
+		fclose(fp);
+	}
+}
+#endif
+#if 0 //150 파일 포인터의 현재 위치 구하기2(fgetpos)
+#include<stdio.h>
+void main()
+{
+	FILE* fp;
+	fpos_t pos;
+
+	fopen_s(&fp, "D:\\C_code\\file.txt", "w+");
+
+	if (fp == NULL)
+	{
+		puts("파일을 생성할 수 없습니다");
+	}
+	else
+	{
+		fputs("재재야 보고싶다.", fp);
+		fgetpos(fp, &pos);
+		printf("파일 포인터의 위치:%d\n", pos);
+		fclose(fp);
+	}
+}
+#endif
+#if 0 //151 파일 포인터의 현재 위치 설정하기(fsetpos)
+#include<stdio.h>
+void main()
+{
+	FILE* fp;
+	fpos_t pos;
+
+	fopen_s(&fp, "D:\\C_code\\file.txt", "w+");
+
+	if (fp == NULL)
+	{
+		puts("파일을 생성할 수 없습니다");
+	}
+	else
+	{
+		fgetpos(fp, &pos);
+		fputs("재재융.", fp);
+		fsetpos(fp, &pos);
+		printf("파일 포인터의 위치:%d\n", ftell(fp));
+		fclose(fp);
+	}
+}
+#endif
+#if 0 //152 파일 닫기(fclose)
+#include<stdio.h>
+void main()
+{
+	FILE* fp;
+
+	fopen_s(&fp, "D:\\C_code\\file.txt", "w+");
+
+	fputs("fclose() 함수", fp);
+	fclose(fp);
+	_fcloseall();
+}
+#endif
+#if 0 //153 파일의 끝에 도달했는지 검사하기(feof)
+#include<stdio.h>
+
+void main()
+{
+	FILE* fp;
+	int ch;
+
+	fopen_s(&fp, "D:\\C_code\\file.txt", "r");
+	
+	if (fp == NULL)
+	{
+		puts("파일을 생성할 수 없습니다");
+	}
+	else
+	{
+		while(!feof(fp))
+		{
+			ch = fgetc(fp);
+			printf("읽은 문자: %c\n", ch);
+		}
+		fclose(fp);
+	}
+}
+#endif
+#if 0 //154 파일 읽기/쓰기 시 에러 검사하기(ferror)
+#include<stdio.h>
+
+void main()
+{
+	FILE* fp;
+	int ch;
+
+	fopen_s(&fp, "D:\\C_code\\file.txt", "r");
+
+	if (fp == NULL)
+	{
+		puts("파일을 생성할 수 없습니다");
+	}
+	else
+	{
+		while (!feof(fp))
+		{
+			ch = fgetc(fp);
+			if (ferror(fp))
+			{
+				puts("파일읽는데 에러임.");
+			}
+			printf("읽은 문자: %c\n", ch);
+		}
+		fclose(fp);
+	}
+}
+#endif
+#if 0 //155 파일 처리 시 발생된 에러 표시하기(perror)
+#include<stdio.h>
+
+void main()
+{
+	FILE* fp;
+	int ch;
+
+	fopen_s(&fp, "D:\\C_code\\file2.txt", "r");
+
+	if (fp == NULL)
+	{
+		perror("파일 개방 에러");
+	}
+	else
+	{
+		while (!feof(fp))
+		{
+			ch = fgetc(fp);
+			if (ferror(fp))
+			{
+				perror("파일 읽기 에러");
+			}
+			printf("읽은 문자: %c\n", ch);
+		}
+		fclose(fp);
+	}
+}
+#endif
+#if 0 //156 임시 파일 이름 만들기(tmpnam)
+#include<stdio.h>
+void main()
+{
+	int i;
+	char buffer[500];
+	char* path;
+
+	for (i = 0; i < 10; i++)
+	{
+		tmpnam_s(buffer,sizeof(buffer));
+	//	tmpnam(buffer);
+		puts(buffer);
+	}
+	for (i = 0; i < 10; i++)
+	{
+		path = _tempnam("", "test");
+		puts(path);
+	}
+}
+#endif
+#if 0 //157 파일이 존재하는지 확인하기(_access)
+#include<stdio.h>
+#include<io.h>
+
+void main()
+{
+	char* path = "D:\\C_code\\file.txt";
+
+	if (_access(path, 0) == 0)
+		puts("해당 경로에 파일이 존재합니다.");
+}
+#endif
+#if 0 //158 파일 이름 변경하기(rename)
+#include<stdio.h>
+void main()
+{
+	char*oldname= "D:\\C_code\\file.txt";
+	char*newname= "D:\\C_code\\file2.txt";
+
+	if (rename(oldname, newname) != 0)
+	{
+		perror("파일명 변경 에러");
+	}
+	else
+	{
+		puts("파일명 변경함.");
+	}
+}
+#endif
+#if 0 //159 파일 이름 변경하기(_chmod)
+#include<stdio.h>
+#include<io.h>
+#include<sys/stat.h>
+void main()
+{
+	char* filename = "D:\\C_code\\file2.txt";
+
+	if (_chmod(filename,_S_IREAD) != 0)//읽기전용
+	{
+		perror("파일 속성 설정 에러");
+	}
+	else
+	{
+		puts("파일속성을 변경함.");
+	}
+}
+#endif
+#if 0 //160 파일 삭제하기(remove)
+#include<stdio.h>
+
+void main()
+{
+	char* filename = "D:\\C_code\\file2.txt";
+
+	if (remove(filename))//읽기전용
+	{
+		perror("파일 삭제 에러");
+	}
+	else
+	{
+		puts("파일을 성공적으로 삭제함.");
+	}
+}
+#endif
+#if 0 //161 디렉터리 생성하기(_mkdir)
+#include<stdio.h>
+#include<direct.h>
+void main()
+{
+	char* pathname = "D:\\C_code\\files";
+
+	if (_mkdir(pathname)==-1)//읽기전용
+	{
+		perror("디렉터리 생성 에러");
+	}
+	else
+	{
+		puts("디렉터리를 성공적으로 생성함.");
+	}
+}
+#endif
+#if 0 //162 디렉터리 삭제하기(_rmdir)
+#include<stdio.h>
+#include<direct.h>
+void main()
+{
+	char* pathname = "D:\\C_code\\files";
+
+	if (_rmdir(pathname) == -1)//읽기전용
+	{
+		perror("디렉터리 삭제 에러");
+	}
+	else
+	{
+		puts("디렉터리를 성공적으로 삭제함.");
+	}
+}
+#endif
+#if 0 //163 현재 작업중인 디렉터리 구하기(_getcwd)
+#include<stdio.h>
+#include<stdlib.h>
+#include<direct.h>
+void main()
+{
+	char pathname[_MAX_PATH];
+
+	_getcwd(pathname, _MAX_PATH);
+
+	puts(pathname);
+}
+#endif
+#if 0 //164 현재 작업중인 디렉터리 변경하기(_chdir)
+#include<stdio.h>
+#include<stdlib.h>
+#include<direct.h>
+void main()
+{
+	char pathname[_MAX_PATH]="D:\\C_code";;
+
+	if (_chdir(pathname) == 0)
+	{
+		_getcwd(pathname, _MAX_PATH);
+		puts(pathname);
+	}
+}
+#endif
+#if 0 //165 현재 작업중인 드라이브 구하기(_getdrive)
+#include<stdio.h>
+#include<direct.h>
+void main()
+{
+	int drive;
+
+	drive = _getdrive();
+	printf("현재 드라이브 : %c\n", 'A' + drive - 1);
+}
+#endif
+#if 0 //166 현재 작업중인 드라이브 변경하기(_chdrive)
+#include<stdio.h>
+#include<direct.h>
+void main()
+{
+	int drive=2;
+
+	if (_chdrive(drive) == 0)
+	{
+		drive = _getdrive();
+		printf("변경된 드라이브 : %c\n", 'A' + drive - 1);
+	}
+}
+#endif
+#if 0 //167 표준 입,출력 스트림 사용하기(stdin, stdout)
+#include<stdio.h>
+void main()
+{
+	printf("산은 산이요~물은물이로다...");
+}
+#endif
+#if 0 //168 현재까지 경과된 초의 수 구하기(time)
+#include<stdio.h>
+#include<time.h>
+
+void main()
+{
+	time_t now;
+	time(&now);
+	printf("1970년 1월 1일부터 경과된 초:%d\n", now);
+}
+#endif
+#if 0 //169 날짜 및 시간 구하기 1(localtime)
+#include<stdio.h>
+#include<time.h>
+
+void main()
+{
+	time_t now;
+	struct tm t;
+
+	time(&now);
+	
+	//t = *localtime(&now);
+	localtime_s(&t,&now);
+
+	printf("현재 날짜 및 시간:%4d.%d.%d.%d:%d:%d\n",
+		t.tm_year + 1900, t.tm_mon + 1, t.tm_mday,
+		t.tm_hour, t.tm_min, t.tm_sec);
+}
+#endif
+#if 0 //170 날짜 및 시간 구하기 2(_ftime)
+#include<stdio.h>
+#include<time.h>
+#include<sys/timeb.h>
+
+void main()
+{
+	struct _timeb tb;
+	struct tm t;
+	//_ftime_s;
+	_ftime_s(&tb);
+
+	localtime_s(&t,&tb.time);
+
+	printf("현재 날짜 및 시간:%4d.%d.%d.%d:%d:%d.%d\n",
+		t.tm_year + 1900, t.tm_mon + 1, t.tm_mday,
+		t.tm_hour, t.tm_min, t.tm_sec,tb.millitm);
+}
+#endif
+#if 0 //171 세계 표준 시 구하기(gmtime)
+#include<stdio.h>
+#include<time.h>
+
+void main()
+{
+	time_t now;
+	struct tm t;
+
+	time(&now);
+
+	gmtime_s(&t, &now);
+
+	printf("세계 표준 시: %4d.%d.%d %d:%d:%d \n",
+		t.tm_year + 1900, t.tm_mon + 1, t.tm_mday,
+		t.tm_hour, t.tm_min, t.tm_sec);
+}
+#endif
+#if 0 //172 날짜 및 시간을 문자열로 변환하기(ctime)
+#include<stdio.h>
+#include<time.h>
+#pragma warning(disable:4996)
+
+void main()
+{
+	time_t now;
+
+	time(&now);
+
+	printf("현재 날짜 및 시간: %s", ctime( &now));
+}
+#endif
+#if 0 //173 날짜 및 시간을 더하거나 빼기(mktime)
+#include<stdio.h>
+#include<time.h>
+
+void main()
+{
+	time_t now;
+	struct tm t;
+
+	time(&now);
+	localtime_s(&t, &now);
+	t.tm_mday += 100;
+	mktime(&t);
+
+	printf("현재 날짜에 100일을 더한 날짜: %4d.%d.%d %d:%d:%d \n",
+		t.tm_year + 1900, t.tm_mon + 1, t.tm_mday,
+		t.tm_hour, t.tm_min, t.tm_sec);
+}
+#endif
+#if 0 //174 날짜 및 시간의 차이 구하기(difftime)
+#include<stdio.h>
+#include<time.h>
+
+void main()
+{
+	time_t s1, s2;
+	double gap=0;
+	int i;
+
+	time(&s1);
+
+	for (i = 0; i < 1000000000; i++)
+	{
+		gap = gap * 100;
+	}
+
+	time(&s2);
+	printf("경과시간: %g초\n", difftime(s2, s1));
+}
+#endif
+#if 0 //175 날짜 및 시간을 미국식으로 변환하기(asctime)
+#include<stdio.h>
+#include<time.h>
+#pragma warning(disable:4996)
+void main()
+{
+	time_t now;
+	struct tm t;
+
+	now = time(NULL);
+	localtime_s(&t, &now);
+
+	printf("현재 날짜 및 시간: %s\n", asctime(&t));
+}
+#endif
+#if 0 //176 날짜 및 시간을 형식화하기(strftime)
+#include<stdio.h>
+#include<time.h>
+#pragma warning(disable:4996)
+void main()
+{
+	time_t now;
+	struct tm t;
+	char buff[100];
+
+	now = time(NULL);
+	localtime_s(&t, &now);
+	strftime(buff, sizeof(buff), "%Y-%m-%d %I:%M:%S %p", &t);
+	puts(buff);
+}
+#endif
+#if 0 //177 삼각 함수 싸인 값 구하기(sin)
+#include<stdio.h>
+#include<math.h>
+
+void main()
+{
+	double x;
+	x = sin((3.14/6));//rad
+
+	printf("sin(1):%g\n", x);
+}
+#endif
+#if 0 //178 삼각 함수 아크 싸인 값 구하기(asin)
+#include<stdio.h>
+#include<math.h>
+
+void main()
+{
+	double x,y;
+	x = asin(1);//rad
+	y = sin(1.57);//rad
+
+	printf("asin():%g//%g\n", x,y);
+}
+#endif
+#if 0 //179 삼각 함수 x/y에 대한 아크 탄젠트 값 구하기(atan2)
+#include<stdio.h>
+#include<math.h>
+
+void main()
+{
+	double x,y;
+	x = atan2(1.0,1.0);
+	y = tan(1.0,1.0);
+
+	printf("atan2:%g, %g\n", x,y);
+}
+#endif
+#if 0 //180 지수 함수 지수값 구하기(exp)
+#include<stdio.h>
+#include<math.h>
+
+void main()
+{
+	double x, y;
+	x = exp(1.0);
+	y = exp(2.0);
+
+	printf("exp:%g, %g\n", x, y);
+}
+#endif
+#if 0 //181 로그 함수 자연 로그값 구하기(log)
+#include<stdio.h>
+#include<math.h>
+
+void main()
+{
+	double x, y;
+	x = log(1.0);
+	y = log(2.0);
+
+	printf("log:%g, %g\n", x, y);
+}
+#endif
+#if 0 //182 로그 함수 밑수를 10으로 하는 로그값 구하기(log10)
+#include<stdio.h>
+#include<math.h>
+
+void main()
+{
+	double x, y;
+	x = log10(1.0);
+	y = log10(2.0);
+
+	printf("log10:%g, %g\n", x, y);
+}
+#endif
+#if 0 //183 제곱근 구하기(sqrt)
+#include<stdio.h>
+#include<math.h>
+
+void main()
+{
+	double x, y;
+	x = sqrt(16.0);
+	y = sqrt(4.0);
+
+	printf("sqrt:%g, %g\n", x, y);
+}
+#endif
+#if 0 //184 절대값 구하기(abs)
+#include<stdio.h>
+#include<math.h>
+
+void main()
+{
+	double x, y;
+	x = abs(1.0);
+	y = abs(-2.0);
+
+	printf("abs:%g, %g\n", x, y);
+}
+#endif
+#if 0 //185 주어진 값보다 작지 않은 최소 정수값 구하기(ceil)
+#include<stdio.h>
+#include<math.h>
+
+void main()
+{
+	printf("ceil(1.0) : %g\n", ceil(1.0));
+	printf("ceil(1.1) : %g\n", ceil(1.1));
+	printf("ceil(1.9) : %g\n", ceil(1.9));
+	printf("ceil(2.5) : %g\n", ceil(2.5));
+	printf("ceil(-2.5) : %g\n", ceil(-2.5));
+	printf("ceil(-3.0) : %g\n", ceil(-3.0));
+}
+#endif
+#if 0 //186 주어진 값보다 크지 않은 최소 정수값 구하기(floor)
+#include<stdio.h>
+#include<math.h>
+
+void main()
+{
+	printf("floor(1.0) : %g\n", floor(1.0));
+	printf("floor(1.1) : %g\n", floor(1.1));
+	printf("floor(1.9) : %g\n", floor(1.9));
+	printf("floor(2.5) : %g\n", floor(2.5));
+	printf("floor(-2.5) : %g\n",floor(-2.5));
+	printf("floor(-3.0) : %g\n",floor(-3.0));
+}
+#endif
+#if 0 //187 주어진 값을 정수와 소수로 분리하기(modf)
+#include<stdio.h>
+#include<math.h>
+void main()
+{
+	double x = 2.3, n, y;
+
+	y = modf(x, &n);
+
+	printf("2.3을 정수와 소수로 분리하면, %g 와 %g 입니다.\n", n, y);
+}
+#endif
+#if 0 //188 x의 y승 구하기(pow)
+#include<stdio.h>
+#include<math.h>
+void main()
+{
+	double x = 10.0, y=3.0,r;
+
+	r = pow(x, y);
+	printf("10^3= %g \n", r);
+}
+#endif
+#if 0 //189 난수 구하기(srand,rand)
+#include<stdio.h>
+#include<time.h>
+#include<stdlib.h>
+void main()
+{
+	int i;
+
+	srand((unsigned)time(NULL));
+
+	for (i = 0; i < 5; i++)
+	{
+		printf("난수%d: %d\n",i, rand()%1500+1);
+	}	
+}
+#endif
+#if 0 //190 숫자 정렬하기(qsort)
+#include<stdio.h>
+#include<stdlib.h>
+
+int intcmp(const void* v1, const void* v2);
+
+void main()
+{
+	int i;
+	int arr[5] = { 1,3,5,4,2 };
+
+	qsort(arr, 5, sizeof(arr[0]), intcmp);
+
+	for (i = 0; i < 5; i++)
+	{
+		printf("%d", arr[i]);
+	}
+}
+int intcmp(const void* v1, const void* v2)
+{
+	int cmpvalue1, cmpvalue2;
+
+	cmpvalue1 = *(int*)v1;
+	cmpvalue2 = *(int*)v2;
+
+	return cmpvalue1 - cmpvalue2;
+}
+#endif
+#if 0 //191 이진 검색 사용하기(bsearch)
+#include<stdio.h>
+#include<stdlib.h>
+#include<search.h>
+
+int intcmp(const void* v1, const void* v2);
+
+void main()
+{
+	int key = 5, * ptr;
+	int array[10] = { 150,27,33,1,5,100,99,75,81,10 };
+	qsort(array,10,sizeof(array[0]),intcmp);
+	ptr = bsearch(&key, array, 10, sizeof(array[0]), intcmp);
+
+	if (ptr)
+	{
+		puts("5를 찾았습니다.");
+	}
+}
+int intcmp(const void* v1, const void* v2)
+{
+	return(*(int*)v1 - *(int*)v2);
+}
+#endif
+#if 0 //192 매크로 상수 정의하기
+#include<stdio.h>
+
+#define program void main(void)
+#define println printf
+
+#define MAX 1000
+#define MIN 0
+
+program
+{
+	println("MAX:%d,MIN:%d\n",MAX,MIN);
+}
+#endif
+#if 0 //193 매크로 함수 정의하기1
+#include<stdio.h>
+
+#define max(x,y) x>y?x:y
+#define min(x,y) x<y?x:y
+void main()
+{
+	printf("최대값: %d\n", max(5, 3));
+	printf("최소값: %d\n", min(5, 3));
+	printf("최대값: %g\n", max(3.5, 4.4));
+	printf("최소값: %g\n", min(3.5, 4.4));
+}
+#endif
+#if 0 //194 매크로 함수 정의하기2
+#include<stdio.h>
+
+#define x_i(x,i) printf("x%s의 값은 %d입니다.\n",#i,x##i)
+
+void main()
+{
+	int xa = 3, xb = 5;
+
+	x_i(x, a);
+	x_i(x, b);
+}
+#endif
+#if 0 //195 매크로 상수가 선언되었는지 검사하기
+#include<stdio.h>
+
+//#define COUNT 100
+
+#if !defined COUNT
+#define COUNT 90
+#endif
+void main()
+{
+	printf("COUNT: %d\n", COUNT);
+}
+#endif
+#if 0 //196 매크로 컴파일 에러 출력하기
+#include<stdio.h>
+
+//#define COUNT 100
+#if !defined COUNT
+#error"COUNT MACRO is not defined!"
+#endif
+
+void main()
+{
+	printf("COUNT:%d\n", COUNT);
+}
+#endif
+#if 0 //197 매크로 상수의 값을 검사하기
+#include<stdio.h>
+
+#define COUNT 100
+
+#if COUNT !=100
+#error "COUNT !=100"
+#endif
+void main()
+{
+	printf("COUNT:%d\n", COUNT);
+}
+#endif
+#if 0 //198 매크로 상수의 선언을 취소하기
+#include<stdio.h>
+
+#define COUNT 100
+
+#if defined COUNT
+#undef COUNT
+#define COUNT 99
+#else
+#define COUNT 88
+#endif
+
+void main()
+{
+	printf("COUNT:%d\n", COUNT);
+}
+#endif
+#if 0 //199 경고 에러를 발생시키지 않기
+#include<stdio.h>
+#pragma warning(disable:4101)
+void main()
+{
+	int i;
+}
+#endif
+#if 0 //200 내장된 매크로 사용하기
+#include<stdio.h>
+void main()
+{
+	printf("파일명:%s\n", __FILE__);
+	printf("날 짜:%s\n", __DATE__);
+	printf("시 간:%s\n", __TIME__);
+	printf("줄 수:%d\n", __LINE__);
+}
+#endif
