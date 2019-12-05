@@ -2920,7 +2920,7 @@ int main()
 	f.puts("hello~~~skywalker");
 }
 #endif
-#if 1 //069
+#if 0 //069
 /*
 -member initializer list
 */
@@ -2945,5 +2945,302 @@ int main()
 	int b;
 	b = 0;
 	int& r = a;
+}
+#endif
+#if 0 //070
+/*
+반드시 멤버 초기화 리스트를 사용해야 하는 경우
+1. 클래스 안에 멤버 데이터가 const 또는 reference 로 되어 있을 때.
+2. 클래스 안에 디폴트 생성자가 없는 타입이 멤버 데이터로 있을 때.
+*/
+class Point
+{
+	int x;
+	int y;
+public:
+	//Point() {}
+	Point(int a, int b) :x(a), y(b) {}
+};
+
+class Rect
+{
+	Point p1;
+	Point p2;
+public:
+	Rect(int a, int b, int c, int d):p1(a,b),p2(c,d) //여기서 초기화하면 객체생성
+	{
+		//p1(a, b); //여기선 함수호출
+	}
+};
+int main()
+{
+	Rect r(1, 2, 3, 4);		//p1 Point 생성자 호출
+	Point p1(1,2);			//p2 Point 생성자 호출
+							//Rect 생성자 호출
+}
+#endif
+#if 0 //071
+/*
+
+*/
+#include<iostream>
+class Point
+{
+public:
+	int y;int x;// 선언된 순서대로 되기때문에 됨. 순서를 x y 순으로 하면 안됨.
+public:
+	Point() :y(0), x(y) {}
+};
+int main()
+{
+	Point p;
+	std::cout << p.x << std::endl;
+}
+#endif
+#if 0 //072
+/*
+멤버 데이터를 초기화하는 3가지 방법
+1. member field initialization
+	=>생성자로 전달된 값을 사용할 수 없다.
+2. member initializer list
+3. 생성자 블록 안에서 초기화
+	=>초기화가 아닌 대입.
+
+클래스를 선언과 구현으로 분리하는 경우
+	=>초기화 리스트는 구현부에 작성한다.
+*/
+#include<iostream>
+class Point
+{
+public:
+	int x = 0;//C++11 //1. member field initialization
+	int y = 0;
+public:
+	Point(int a,int b):x(a),y(b) //2. member initializer list
+	{
+		x = a; y = b;//3. 생성자 블록 안에서 초기화
+	}
+};
+int main()
+{	
+}
+#endif
+#if 0 //073
+/*
+직접 초기화 vs 복사 초기화
+1. 직접초기화(direct initailization): = 없이 초기화 하는 것
+	OFile f1("a.txt")
+2. 복사 초기화(copy initailization): = 를 사용해서 초기화 하는 것
+	OGile f2="a.txt"
+
+함수 인자 전달과 초기화 방법
+1. 함수 인자 전달 시 복사초기화를 사용한다.
+2. 특정 클래스 설계시 복사 초기화를 사용하지 못하게 하는것이 좋을 때가 있다.
+*/
+#pragma warning(disable:4996)
+#include<iostream>
+class OFile
+{
+	FILE* file;
+public:
+	OFile(const char* filename)
+	{
+		file = fopen(filename, "wt");
+	}
+	~OFile() { fclose(file); }
+};
+void foo(OFile f) {}
+int main()
+{
+	OFile f1("D:\\C_code\\b.txt");  //직접 초기화
+	OFile f2 = "D:\\C_code\\b2.txt";	//복사 초기화
+
+	foo(f1);
+	foo("D:\\C_code\\hellllo.txt");
+}
+#endif
+#if 0 //073(2)
+/*
+explicit 생성자
+1. 객체를 초기화 할 때 직접 초기화만 사용할 수 있고,
+복사 초기화는 사용할 수 없게 함.
+2. OFile 의 생성자가 explicit 이고, foo함수가 OFile을 인자로 가지는 경우
+	OFile f1("a.txt");	//OK
+	OFile f1="a.txt";	//ERROR
+	foo(f1);			//OK
+	foo("hello.txt");	//ERROR
+*/
+#include<iostream>
+#pragma warning(disable:4996)
+class OFile
+{
+	FILE* file;
+public:
+	explicit OFile(const char* filename)
+	{
+		file = fopen(filename, "wt");
+	}
+	~OFile() { fclose(file); }
+};
+void foo(OFile f) {}
+int main()
+{
+	OFile f1("D:\\C_code\\b.txt");  //직접 초기화
+	OFile f2 = "D:\\C_code\\b2.txt";	//복사 초기화
+
+	foo(f1);
+	foo("D:\\C_code\\hellllo.txt");
+}
+#endif
+#if 0 //074
+//C++ 표준 라이브러리와 explicit 생성자
+#include<string>
+#include<vector>
+#include<iostream>
+int main()
+{
+	std::string s1("hello");
+	std::string s2 = "heellow";
+
+	std::vector<int> v1(10);
+	std::vector<int> v2=10;
+	std::vector<int> v43 = { 10 }; //다른 생성자가 호출된다.
+
+	//C++ 표준 스마트 포인더
+	std::shared_ptr<int> p1(new int);
+	std::shared_ptr<int> p2 = new int;
+}
+#endif
+#if 0 //074
+/*
+1. 복사 생성자랑?
+	=> 자신과 동일한 타입 한개를 인자로 가지는 생성자
+2. 사용자 복사 생성자를 만든지 않으면 
+	=>컴파일러가 제공(복사생성자 자체를 만들지 않으면 만들어준다.)
+	=>디폴트 복사 생성자(default copy constructor)
+	=>모든 멤버를 복사(bitwise copy)한다.
+*/
+#include<iostream>
+class Point
+{
+public:
+	int x;
+	int y;
+	Point() :x(0), y(0) {}
+	Point(int a, int b) :x(a), y(b) {}
+	Point(const Point& p) :x(p.y), y(p.x)
+	{
+		std::cout << "copy ctor" << std::endl;
+	}
+};
+int main()
+{
+	Point p1;
+	Point p2(1, 2);
+	//Point p3(1);
+	Point p4(p2);
+
+	std::cout << p4.x << std::endl;
+	std::cout << p4.y << std::endl;
+}
+#endif
+#if 0 //075
+/*
+//복사 생성자가 호출 되는 3가지 경우
+
+1. 자신과 동일한 타입의 객체로 초기화 될 때.
+	=>Point p2(p1);
+	=>Point p2{2};
+	=>Point p2 = p1; =>explicit 이 아닌 경우만
+2. 함수 인자를 call by value 로 받을 경우
+	=>함수 인자를 const reference 로 사용 하면 복사본을 만들지
+	않으므로 복사 생성자가 호출되지 않는다.
+
+3. 함수가 객체 값으로 변환 할 때.
+	=>참조로 변환 하면 리턴 용 임시객체가 생성되지 않는다.
+	=>단, 지역변수는 참조로 반환 하면 안된다.
+*/
+#include<iostream>
+class Point
+{
+public:
+	int x; int y;
+	Point() {}
+	Point(int a, int b) :x(a), y(b) 
+	{
+		std::cout << "ctor" << std::endl;
+	}
+	explicit Point(const Point& p) :x(p.x), y(p.y)
+	{
+		std::cout << "copy ctor" << std::endl;
+	}
+};
+void foo(const Point& pt) {}
+Point p;
+Point& goo()
+{
+	return p;
+}
+
+int main()
+{
+	Point p1(1, 2);	//생성자
+	Point p2(p1);	//
+	Point p3{ p1 };
+	Point p4 = { p1 };
+	Point p5 = p1;
+	foo(p1);
+	goo();
+
+	std::cout << p4.x << std::endl;
+	std::cout << p4.y << std::endl;
+}
+#endif
+#if 0 //076
+/*
+1. 객체가 자신의 동일한 타입의 객체로 초기화 될 때
+	=>복사 생성자가 사용된다
+	=>사용자가 만들지 않은 경우 디폴트 복사 생성자가 사용 된다.
+	=>디폴트 복사 생성자는 모든 멤버를 복사 해준다
+2. 디폴트 복사 생성자가 모든 멤버를 복사 해주는 것은
+	=>편리한 경우도 있다
+	=>문제가 되는 경우도 있다. 언제 그럴까?
+
+*/
+#include<iostream>
+class Point
+{
+public:
+	int x; int y;
+	Point() {}
+	Point(int a, int b) :x(a), y(b){}	
+};
+int main(){}
+#endif
+
+#if 0 //077
+#include<iostream>
+#pragma warning(disable:4996)
+class Person
+{
+	char* name;
+	int age;
+public:
+	Person(const char* n, int a) :age(a)
+	{
+		name = new char[strlen(n) + 1];
+		strcpy(name, n);
+	}
+	~Person() { delete[] name; }
+	Person(const Person& p) :age(p.age)
+	{
+		name = new char[strlen(p.name) + 1];
+		strcpy(name, p.name);
+	}
+};
+int main()
+{
+	Person p1("park", 20);
+	Person p2 = p1;//복사 생성자를 따로 안만들어주면 오류생김.
 }
 #endif
