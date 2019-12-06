@@ -640,10 +640,595 @@ void array_copy(void* dest, const void* src, int size)
 	}
 }
 #endif
-#if 1 //233 텍스트 파일을 한 줄씩 쓰기(fopen,fputs,fclose)
+#if 0 //233 텍스트 파일을 한 줄씩 쓰기(fopen,fputs,fclose)
 #include<stdio.h>
 void main()
 {
+	FILE* fp;
 
+	fopen_s(&fp,"D:\\C_code\\hii.txt", "w+");
+
+	if (fp != NULL)
+	{
+		fputs("대한민국\n", fp);
+		fputs("대한민국\n", fp);
+		fputs("대한민국\n", fp);
+		fputs("대한민국\n", fp);
+		fputs("대한민국\n", fp);
+		fclose(fp);
+	}
 }
+#endif
+#if 0 //234 텍스트 파일을 한 줄씩 읽기(fgets)
+#include<stdio.h>
+void main()
+{
+	FILE* fp;
+	char buff[100];
+
+	fopen_s(&fp, "D:\\C_code\\hii.txt", "r");
+
+	if (fp != NULL)
+	{
+		while (!feof(fp))
+		{
+			fgets(buff, 100, fp);
+			printf(buff);
+		}
+		fclose(fp);
+	}
+}
+#endif
+#if 0 //235 텍스트 파일 쓰기(fwrite)
+#include<stdio.h>
+void main()
+{
+	FILE* fp;
+	char* string = "우리강산\n";
+
+	fopen_s(&fp, "D:\\C_code\\hii2.txt", "w+");
+
+	if (fp != NULL)
+	{
+		fwrite(string, 1, strlen(string), fp);
+		fwrite(string, 1, strlen(string), fp);
+		fwrite(string, 1, strlen(string), fp);
+		fclose(fp);
+	}
+}
+#endif
+#if 0 //236 텍스트 파일 읽기(fread)
+#include<stdio.h>
+void main()
+{
+	FILE* fp;
+	char buff[100] = { 0, };
+	int len;
+
+	fopen_s(&fp, "D:\\C_code\\hii2.txt", "r");
+
+	if (fp != NULL)
+	{
+		while (!feof(fp))
+		{
+				len = fread(buff, 1, 9, fp);
+			if (ferror(fp) || len < 9) break;
+			printf("read: %d, %s", len, buff);
+		}
+		fclose(fp);
+	}
+}
+#endif
+#if 0 //237 이진 파일 쓰기(fwrite)
+#include<stdio.h>
+void main()
+{
+	FILE* fp;
+	char buff[5];
+
+	fopen_s(&fp, "D:\\C_code\\bin.txt", "w+b");
+	
+	buff[0] = '@';
+	buff[1] = 0;
+	buff[2] = 0x112;
+	buff[3] = 0x03;
+	buff[4] = 0x61;
+
+	if (fp != NULL)
+	{
+		fwrite(buff, 1, 5, fp);
+		fclose(fp);
+	}
+}
+#endif
+#if 0 //238 이진 파일 읽기(fread)
+#include<stdio.h>
+void main()
+{
+	FILE* fp;
+	char buff;
+
+	fopen_s(&fp, "D:\\C_code\\bin.txt", "rb");
+	
+	if (fp != NULL)
+	{
+		while (!feof(fp))
+		{
+			fread(&buff, 1, 1, fp);
+			if (!feof(fp))printf("%d(%#x)", buff, buff);
+		}
+		fclose(fp);
+	}
+}
+#endif
+#if 0 //239 파일을 다른 디렉터리로 이동하기(rename)
+#include<stdio.h>
+void main()
+{
+	char* filename = "D:\\C_code\\file2.txt";
+	char* movefile = "D:\\C_code\\aa\\file!!.txt";
+
+	if (rename(filename, movefile) != 0)
+	{
+		perror("파일 이동 에러");
+	}
+	else
+	{
+		puts("파일이 이동되었습니다.");
+	}
+}
+#endif	
+#if 0 //240 파일 복사하기(fread, fwrite)
+#include<stdio.h>
+void main()
+{
+	FILE* fpR, * fpW;
+	char buff;
+	int len;
+
+	fopen_s(&fpR, "D:\\C_code\\aa\\bin2.txt","rb");
+
+	if (fpR == NULL)
+	{
+		perror("파일 읽기 개방 에러");
+		return;
+	}
+	fopen_s(&fpW, "D:\\C_code\\aa\\abc.txt","w+b");
+	
+	if (fpW == NULL)
+	{
+		perror("파일 쓰기 개방 에러");
+		fclose(fpR);
+		return;
+	}
+	while (!feof(fpR))
+	{
+		len = fread(&buff, 1, 1, fpR);
+		if (ferror(fpR))
+		{
+			perror("파일 읽기 에러");
+			_fcloseall();
+			return;
+		}
+		if (len>0)//if(!feof(fpR))
+		{
+			fwrite(&buff, 1, 1, fpW);
+			if (ferror(fpW))
+			{
+				perror("파일 쓰기 에러");
+				_fcloseall();
+				return;
+			}
+		}
+	}
+	_fcloseall();
+	puts("파일을 성공적으로 복사하였습니다.");	
+}
+#endif	
+#if 0 //241 두 개의 파일 합치기
+#include<stdio.h>
+
+#define FILEREAD 4096
+
+void main()
+{
+	FILE* fpR1, * fpR2, * fpW;
+	char buff[FILEREAD];
+	int len;
+
+	fopen_s(&fpR1, "D:\\C_code\\aa\\bin3.txt", "rb");
+
+	if (fpR1 == NULL)
+	{
+		perror("파일 읽기 개방 에러");
+		return;
+	}
+	fopen_s(&fpR2, "D:\\C_code\\aa\\bin2.txt", "rb");
+	
+	if (fpR2 == NULL)
+	{
+		perror("파일 읽기 개방 에러");
+		_fcloseall();
+		return;
+	}
+	fopen_s(&fpW, "D:\\C_code\\aa\\Output01.txt", "w+b");
+
+	if (fpW == NULL)
+	{
+		perror("파일 쓰기 개방 에러");
+		_fcloseall();
+		return;
+	}
+	while (!feof(fpR1))
+	{
+		len = fread(buff, 1, FILEREAD, fpR1);
+		if (ferror(fpR1))
+		{
+			perror("파일 읽기 에러 1");
+			_fcloseall();
+			return;
+		}
+		if (len > 0)
+		{
+			fwrite(buff, 1, len, fpW);
+			if (ferror(fpW))
+			{
+				perror("파일 쓰기 에러1");
+				_fcloseall();
+				return;
+			}
+		}
+	}
+	while (!feof(fpR2))
+	{
+		len = fread(buff, 1, FILEREAD, fpR2);
+		if (ferror(fpR2))
+		{
+			perror("파일 읽기 에러2");
+			_fcloseall();
+			return;
+		}
+		if (len > 0)
+		{
+			fwrite(buff, 1, len, fpW);
+			if (ferror(fpW))
+			{
+				perror("파일 쓰기 에러 2");
+				_fcloseall();
+				return;
+			}
+		}
+	}
+	_fcloseall();
+	puts("파일이 성공적으로 합쳐졌습니다.");
+}
+#endif
+#if 0 //242 파일에서 특정 문자열 검색하기(strstr)
+#include<stdio.h>
+#include<string.h>
+
+void main()
+{
+	FILE* fp;
+	char buff[200];
+	int line = 1;
+
+	fopen_s(&fp, "D:\\C_code\\aa\\uuu.txt", "r");
+
+	if (fp == NULL)
+	{
+		perror("파일 읽기 개방 에러");
+		return;
+	}
+
+	while (!feof(fp))
+	{
+		fgets(buff, 200, fp);
+
+		if (strstr(buff, "coke"))
+		{
+			printf("Line(%2d):%s", line, buff);
+		}
+		line++;
+	}
+	_fcloseall();
+}
+#endif
+#if 0 //243 파일에서 특정 문자열 교체하기
+//맨 마지막줄이 안쓰여짐.
+#include<stdio.h>
+#include<string.h>
+#include<stdlib.h>
+#include<malloc.h>
+#pragma warning(disable:4996)
+
+void main()
+{
+	FILE* fpR, * fpW;
+	char buff[200];
+	char* pbuf, * dup;
+	int len, pos1, pos2;
+
+	fopen_s(&fpR, "D:\\C_code\\aa\\uuu.txt", "r");
+
+	if (fpR == NULL)
+	{
+		perror("파일 읽기 개방 에러");
+		return;
+	}
+	fopen_s(&fpW, "D:\\C_code\\aa\\uuu_change.txt", "w+");
+
+	if (fpW == NULL)
+	{
+		perror("파일 쓰기 개방 에러");
+		_fcloseall();
+		return;
+	}
+
+	while (!feof(fpR))
+	{
+		fgets(buff, 200, fpR);
+		pbuf = strstr(buff, "coke");
+		if (pbuf)
+		{
+			len = strlen(buff);
+			pos1 = pbuf - buff;
+
+			dup = strdup(buff);
+			strnset(&buff[pos1], 0, len - pos1);
+			strcat(buff, "pepsi");
+
+			pos1 = pbuf - buff + strlen("coke");
+			pos2 = pbuf - buff + strlen("pepsi");
+
+			strcpy(&buff[pos2], &dup[pos1]);
+			free(dup);
+		}
+		if (!feof(fpR))fputs(buff, fpW);
+	}
+	_fcloseall();
+	puts("replace coke to pepsi all.");
+}
+#endif
+#if 0 //244 연/월/일/ 시:분:초 출력하기(time, localtime)
+#include<stdio.h>
+#include<time.h>
+#pragma warning(disable:4996)
+
+void main()
+{
+	FILE* fp;
+	char buff[200];
+	time_t now;
+	struct tm t;
+
+	fopen_s(&fp, "D:\\C_code\\aa\\date1.txt", "w+");
+
+	if (fp == NULL)
+	{
+		perror("파일 쓰기 개방 에러");
+		_fcloseall();
+		return;
+	}
+	now = time(NULL);
+	t = *localtime(&now);
+	sprintf(buff, "%d/%d/%d %d:%d:%d",
+		t.tm_year + 1900, t.tm_mon + 1, t.tm_mday,
+		t.tm_hour, t.tm_min, t.tm_sec);
+
+	fputs(buff, fp);
+	_fcloseall();
+
+	puts(buff);
+	puts("시간을 D:\\C_code\\aa\\date1.txt에 저장하였습니다.");
+}
+#endif
+#if 0 //245 출생일로부터 오늘까지의 경과일 수 구하기(mktime)
+#include<stdio.h>
+#include<time.h>
+#pragma warning(disable:4996)
+
+#define DAYSEC (24*60*60)
+
+void main()
+{
+	time_t n1, n2;
+	struct tm t1, t2;
+	double elapsed;
+
+	t1.tm_year = 91;
+	t1.tm_mon = 11 - 1;
+	t1.tm_mday = 1;
+	t1.tm_hour = 0;
+	t1.tm_min = 0;
+	t1.tm_sec = 0;
+
+	n1 = time(NULL);
+	t2 = *localtime(&n1);
+	
+	n1 = mktime(&t1);
+	n2 = mktime(&t2);
+
+	n2 = n2 - n1;
+	elapsed = (double)(n2/DAYSEC);
+	printf("박재희가 태어난 지 %.2lf일째 입니다.\n", elapsed);
+}
+#endif
+#if 0 //246 각 달의 마지막 날짜 구하기(mktime)
+#include<stdio.h>
+#include<time.h>
+#pragma warning(disable:4996)
+
+#define DAYSEC 86400L
+
+void main()
+{
+	int i;
+	time_t now;
+	struct tm t1, t2;
+	int n1, n2, last;
+
+	now = time(NULL);
+	t1 = *localtime(&now);
+	t1.tm_mday = 1;
+	t2 = t1;
+
+	for (i = 0; i <= 11; i++)
+	{
+		t1.tm_mon = i;
+		t2.tm_mon = i + 1;
+		n1 = mktime(&t1);
+		n2 = mktime(&t2);
+		last = (n2 - n1) / DAYSEC;
+		printf("%d년 %2d월의 마지막 날짜는 %d 일입니다.\n",
+			t1.tm_year + 1900, t1.tm_mon + 1, last);
+	}
+}
+#endif
+#if 0 //247 D-Day 구하기(mktime)
+#include<stdio.h>
+#include<time.h>
+#define DAYSEC 86400L
+#pragma warning(disable:4996)
+
+
+void main()
+{
+	time_t now;
+	struct tm t, dday = { 0,0,0,8,8,2020 };
+	int n1, n2, nDday;
+
+	now = time(NULL);
+	t = *localtime(&now);
+
+	dday.tm_year -= 1900;
+	dday.tm_mon -= 1;
+
+	t.tm_hour = 0;
+	t.tm_min = 0;
+	t.tm_sec = 0;
+
+	n1 = mktime(&t);
+	n2 = mktime(&dday);
+
+	nDday = (n2 - n1) / DAYSEC;
+
+	printf("오늘의 날짜는 %s", ctime(&now));
+	printf("최수린의 생일:%d일 남았습니다.(%d/%d/%d)\n",
+		nDday, dday.tm_year + 1900, dday.tm_mon + 1, dday.tm_mday);
+}
+#endif
+#if 0 //248 오늘 날짜로부터 크리스마스까지의 남은 시간 구하기
+#include<stdio.h>
+#include<time.h>
+#pragma warning(disable:4996)
+
+void main()
+{
+	time_t now;
+	struct tm t, christmas = { 0,0,0,25,12,2020 };
+	int n1, n2;
+	__int64	nChristmas;
+
+	now = time(NULL);
+	t = *localtime(&now);
+
+	christmas.tm_year -= 1900;
+	christmas.tm_mon -= 1;
+
+	n1 = mktime(&t);
+	n2 = mktime(&christmas);
+
+	nChristmas = (n2 - n1);
+	christmas = *localtime(&nChristmas);
+
+	printf("오늘은 날짜는 %s", ctime(&now));
+	printf("크리스마스까지 남은 시간은 %d개월 %d일 %d시간 %d분 %d초입니다.\n",
+		christmas.tm_mon, christmas.tm_mday, christmas.tm_hour,
+		christmas.tm_min, christmas.tm_sec);
+}
+#endif
+#if 0 //249 오늘 날짜에 임의의 날짜 더하고 빼기
+#include<stdio.h>
+#include<time.h>
+#pragma warning(disable:4996)
+
+void main()
+{
+	time_t now;
+	struct tm t, tb;
+
+	now = time(NULL);
+	t = *localtime(&now);
+
+	tb = t;
+
+	t.tm_mon += 100;
+	t.tm_mday += 90;
+	t.tm_hour += 80;
+
+	mktime(&t);
+
+	printf("오늘 날짜는%d/%d/%d %d:%d:%d 입니다.\n",
+		tb.tm_year + 1900, tb.tm_mon + 1, tb.tm_mday,
+		tb.tm_hour, tb.tm_min, tb.tm_sec);
+
+	printf("100개월 90일 80시간을 더한 날짜는 %d/%d/%d %d:%d:%d입니다.\n",
+		t.tm_year + 1900, t.tm_mon + 1, t.tm_mday,
+		t.tm_hour, t.tm_min, t.tm_sec);
+
+	tb.tm_mon -= 100;
+	tb.tm_mday -= 90;
+	tb.tm_hour -= 80;
+
+	mktime(&tb);
+	printf("100개월 90일 80시간을 뺀 날짜는 %d/%d/%d %d:%d:%d입니다.\n",
+		tb.tm_year + 1900, tb.tm_mon + 1, tb.tm_mday,
+		tb.tm_hour, tb.tm_min, tb.tm_sec);
+}
+#endif
+#if 0 //250 크리스마스의 요일 구하기
+#include<stdio.h>
+#include<time.h>
+
+void main()
+{
+	struct tm christmas = { 0,0,0,25,12 - 1,2019 - 1900 };
+	char* wday[] = { "일","월","화","수","목","금","토" };
+	char buff[100];
+
+	mktime(&christmas);
+
+	strftime(buff, sizeof(buff), "2020년 12월 25일은 %A입니다.",&christmas);
+
+	puts(buff);
+	printf("2020년 12월 25일은 %s요일입니다.\n", wday[christmas.tm_wday]);
+}
+#endif
+#if 0 //251 세계 표준 시와 국내 표준 시의 시간 차 구하기(localtime)
+#include<stdio.h>
+#include<time.h>
+#pragma warning(disable:4996)
+
+void main()
+{
+	time_t now, n1, n2;
+	struct tm t1, t2;
+
+	time(&now);
+	t1 = *localtime(&now);
+	t2 = *gmtime(&now);
+
+	n1 = mktime(&t1);
+	n2 = mktime(&t2);
+
+	printf("UT와 한국 LT시간차이:%g 시간 \n", difftime(n1, n2) / 3600.);
+}
+#endif
+#if 1 //252 5초간 지연하는 함수 구현하기(clock)
+#include<stdio.h>
+#include<time.h>
+
+
+
 #endif

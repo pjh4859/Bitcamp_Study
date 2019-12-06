@@ -319,7 +319,7 @@ int main()
 	foo(r);
 }
 #endif
-#if 1
+#if 0
 #include<iostream>
 class Point
 {
@@ -345,5 +345,662 @@ int main()
 	p1.print();
 	p1.print();
 	p1.print();
+}
+#endif
+//---------2019-12-06-----------------------------------------
+//---------2019-12-06-----------------------------------------
+//---------2019-12-06-----------------------------------------
+#if 0 //virtual 상속 하면 문제 안생김 
+//다이아몬드 상속
+#include<iostream>
+#include<string>
+class File
+{
+public:
+	std::string filename;
+	void open() {}
+};
+class InputFile:virtual public File 
+{
+public:
+	void read() {}
+	//void open() {}
+};
+class OutputFile:virtual public File
+{
+public:
+	void write() {}
+	//void open() {}
+
+};
+class IOFile :public InputFile, public OutputFile
+{
+
+};
+int main()
+{
+	IOFile file;
+	file.open();
+}
+#endif
+#if 0 
+//추상 클래스
+/*
+1. 순수 가상 함수 (pure virtual dunction)
+	=>함수의 구현부가 없고, 선언부가 =0 으로 끝나는 가상 함수
+2. 추상 클래스(Abstract Class)
+	=>순수 가상 함수가 한 개 이상 있는 클래스
+3. 추상 클래스 특징
+	=>객체를 생성할 수 없다.
+*/
+#include<iostream>
+class Shape
+{
+public:
+	virtual void Draw() = 0;//pure virtual function
+	//이게 불려오면 문제가 생기므로 이걸 상속받는 애들은 이걸 꼭 재정의 해줘야 함
+	//메모리도 안잡힘. 
+};
+class Rect :public Shape
+{
+public:
+	virtual void Draw() {}
+	//virtual 안써도 되는데 가독성때문에 쓰는게 좋다
+	//한 번 더 상속하고 하면 모르게되니
+};
+int main()
+{
+//	Shape s;
+	Shape* p;
+	Rect r;
+}
+#endif
+#if 0
+#include<iostream>
+#include<vector>
+using namespace std;
+class Shape
+{
+public:
+	//virtual void Draw() { cout << "Shape::Draw" << endl; }
+	virtual void Draw() = 0;
+	//여기에 virtual 을 안쓰면 Shape::Draw 만 불려옴
+	//=0; 해주면 메모리도 안잡힘?
+};
+class Circle :public Shape
+{
+public:
+	virtual void Draw(){ cout << "Circle::Draw" << endl; }
+};
+class Rect :public Shape
+{
+public:
+	void Draw() { cout << "Rect::Draw" << endl; }
+};
+class Tri :public Shape
+{
+public:
+	void Draw() { cout << "Tri::Draw" << endl; }
+};
+int main()
+{
+	vector<Shape*>v;
+	while (1)
+	{
+		int cmd;
+		cin >> cmd;
+		if (cmd == 1)v.push_back(new Rect);
+		else if (cmd == 2)v.push_back(new Circle);
+		else if (cmd == 3)v.push_back(new Tri);
+		else if (cmd == 9)
+		{
+			for (auto p : v)
+				p->Draw();
+		}
+		if (cmd == -1)
+			break;
+	}
+}
+#endif
+#if 0
+//카메라가 많아지면 요케 짜면 안된다
+#include<iostream>
+class Camera
+{
+public:
+	void take()
+	{
+		std::cout << "take pictue" << std::endl;
+	}
+};
+class HDCamera
+{
+public:
+	void take()
+	{
+		std::cout << "take pictue HD" << std::endl;
+	}
+};
+class People
+{
+public:
+	void useCamera(Camera* p) { p->take(); }
+	void useCamera(HDCamera* p) { p->take(); }
+};
+int main()
+{
+	People p;
+	Camera c1;
+	p.useCamera(&c1);
+	HDCamera hd;
+	p.useCamera(&hd);
+}
+#endif
+#if 0
+#include<iostream>
+//class ICamera
+struct ICamera
+{
+//public:
+	virtual void take() = 0;
+};
+class Camera:public ICamera
+{
+public:
+	void take()
+	{
+		std::cout << "take pictue" << std::endl;
+	}
+};
+class HDCamera :public ICamera
+{
+public:
+	void take()
+	{
+		std::cout << "take pictue HD" << std::endl;
+	}
+};
+class People
+{
+public:
+	void useCamera(ICamera* p) { p->take(); }
+};
+int main()
+{
+	People p;
+	Camera c1;
+	p.useCamera(&c1);	
+	HDCamera hd;
+	p.useCamera(&hd);
+}
+#endif
+#if 0
+#include<iostream>
+class Point
+{
+	int x, y;
+public:
+	Point(int a = 0, int b = 0) :x(a), y(b) {}
+	void Print()const
+	{
+		std::cout << x << ", " << y << std::endl;
+	}
+	friend Point operator+(const Point& p1, const Point& p2);
+	friend Point operator+(const int i, const Point& p2);
+};
+Point operator+(const Point& p1, const Point& p2)
+{
+	Point temp;
+	temp.x = p1.x + p2.x;
+	temp.y = p1.y + p2.y;
+	return temp;
+}
+Point operator+(const int i, const Point& p2)
+{
+	Point temp;
+	temp.x = i + p2.x;
+	temp.y = i + p2.y;
+	return temp;
+}
+int main()
+{
+	int n = 1 + 2;
+	Point p1(1, 1);
+	Point p2(2, 2);
+	Point p3 = p1 + p2;//1. p1.operator+(p2)
+						//2. operator+(p1,p2)
+
+	p3=p1 + 1;	//(p1.operator+(in)
+	p3.Print();
+	p3=1 + p2;	//operator+(int, Point)
+	p3.Print();
+}
+#endif
+#if 0
+#include<iostream>
+using namespace std;
+class Point
+{
+	int x, y;
+public:
+	Point(int a=0,int b=0):x(a),y(b){}
+	void print()const
+	{
+		cout << x << ", " << y << endl;
+	}
+	Point& operator++()
+	{
+		++x; ++y;
+		return *this;
+	}
+	const Point operator++(int)
+	{
+		Point temp(*this);
+		//++x;
+		//++y;
+		++(*this);
+		return temp;
+	}
+};
+int main()
+{
+	int n = 3;
+	++n;
+	cout << "n: " << n << endl;
+	Point p(1, 1);
+	++p;	//p.operae
+	p.print();
+	++++n;
+	cout << "n: " << n << endl;
+	++++p;	//(p.operator++()).operator++()
+	p.print();
+	int i = n++;
+	Point p1 = p++; //p.operator++(int)
+	p1.print();
+	p.print();
+	//n++++;//error
+	p++++;
+}
+#endif // 0
+#if 0
+#include<iostream>
+using namespace std;
+class Point
+{
+	int x, y;
+public:
+	Point(int a, int b) :x(a), y(b) {}
+	void print()const { cout << x << ", " << y << endl; }
+	Point& operator =(const Point&p)
+	{
+		cout << "=" << endl;
+		x = p.x;
+		y = p.y;
+		return *this;
+	}
+};
+int main()
+{
+	Point p1(1, 1); //생성자
+	Point p2(2, 2);
+	Point p3 = p1;	//복사 생성자
+
+	p3 = p2;
+	p3.print();
+	int n = 10;
+	int b;
+	b - 20;
+}
+#endif
+#if 0
+#include<iostream>
+using namespace std;
+
+int main()
+{
+	printf("%d\n", 3);
+	cout << 3;//cout.operator<<(3) => operator<<"(int)
+	cout << 3.4;//cout.operator(3.4)=>operator<<(double)
+
+}
+#endif
+#if 0
+#include<cstdio>
+namespace std
+{
+	class ostream
+	{
+	public:
+		ostream& operator<<(int n) { printf("%d", n); return *this; }
+		ostream& operator<<(double n) { printf("%f", n); return *this; }
+	};
+	ostream cout;
+}
+int main()
+{
+	//cout << 3;		//cout.operator<<(int n)
+	//cout << 3.4;	//cout.operator<<(double n)
+	//cout << 3 << 3.4;
+	//cout << 3.4 << 1;
+	std::cout << 3 << 3.4;
+}
+#endif
+#if 0
+#include<iostream>
+class Point
+{
+	int x, y;
+public:
+	Point(int a = 0, int b = 0) :x(a), y(b) {}
+	friend std::ostream& operator<<(std::ostream& os, const Point& pt);
+
+};
+ std::ostream& operator<<(std::ostream& os, const Point& pt)
+{
+	os << pt.x << ", " << pt.y;
+	return os;
+}
+
+int main()
+{
+	int a = 10;
+	double d = 3.4;
+	Point pt(1, 2);
+	std::cout << a << ", " << d<<'\n';
+	std::cout << pt;	//std::cout.operator<<(pt)==>operator<<(Point)
+}						//operator<<(cout,pt)==>operator(ostream,Point)
+#endif
+#if 0
+#include<iostream>
+#include<cstdio>
+using namespace std;
+ostream& myendl(ostream& os)
+{
+	os.put('\n');
+	os.flush();
+	return os;
+}
+
+int main()
+{
+	cout << "test";
+	cout << endl;
+	cout << "aaa";
+	endl(cout);
+	cout << "bbb";
+	cout.put('\n');
+	cout.flush();
+
+	cout << "endl";
+	endl(cout) << "test";
+	endl(cout) << "end";
+
+	myendl(cout);
+	cout << "bitcamp";
+	cout << endl;
+	cout << myendl;
+}
+#endif
+#if 0
+#include<cstdio>
+namespace std
+{
+	class ostream
+	{
+	public:
+		ostream& flush() { return *this; }
+		ostream& put(char c) { printf("%c", c); return *this; }
+		ostream& operator<<(int n) { printf("%d", n); return*this; }
+		ostream& operator<<(double n) { printf("%f", n); return*this; }
+		ostream& operator<<(ostream& (*f)(ostream&))
+		{
+			f(*this);
+			return *this;
+		}
+	};
+	ostream cout;
+
+	ostream& endl(ostream& os)
+	{
+		os.put('\n');
+		os.flush();
+		return os;
+	}
+}
+int main()
+{
+	std::cout << 3;
+	std::cout << std::endl << 3.4 << std::endl;
+}
+#endif
+#if 0
+#include<iostream>
+using namespace std;
+ostream& tab(ostream& os)
+{
+	os.put('\t');
+	return os;
+}
+ostream& menu(ostream& os)
+{
+	os << "1.칼국수" << endl;
+	os << "2.라면" << endl;
+	return os;
+}
+int main()
+{
+	cout << "A" << '\t' << "B" << endl;
+	cout << "A" << tab << "B" << endl;
+	cout << menu << endl;
+}
+#endif
+#if 0
+#include <iostream>
+#include <cstring>
+#pragma warning(disable:4996)
+using namespace std;
+
+class String
+{
+	//char buff[10];
+	char* buff;
+	int size;
+public:
+	String(const char* s)
+	{
+		size = strlen(s);
+		buff = new char[size + 1];
+		strcpy(buff, s);
+	}
+	String(const String& s) : size(s.size)
+	{
+		buff = new char[size + 1];
+		strcpy(buff, s.buff);
+	}
+	~String() { delete[] buff; }
+	friend ostream& operator<<(ostream& os, const String& s);
+	String operator=(const String& s)
+	{
+		if (&s == this)
+			return *this;
+		size = s.size;
+		delete[] buff;
+		buff = new char[size + 1];
+		strcpy(buff, s.buff);
+		return *this;
+	}
+};
+
+ostream& operator<<(ostream& os, const String& s)
+{
+	return os << s.buff;
+}
+
+int main()
+{
+	String s1 = "hello";
+	cout << s1 << endl;         //operator<<(count, s1)
+
+	String s2 = s1;            //복사 초기화
+	cout << s2 << endl;
+
+	String s3 = "world";
+	cout << s3 << endl;
+	s3 = s1;               //s3.operator=(s1)   ==>   operator=(String)
+	s3 = s2 = s1;
+	cout << s3 << endl;
+
+	s1 = s1;
+	cout << s1 << endl;
+	int n = 10;
+	n = n;
+}
+#endif
+#if 0
+#include<iostream>
+class Car
+{
+	int color;
+public:
+	~Car() { std::cout << "~Car()" << std::endl; }
+	void Go(){ std::cout << "Car go" << std::endl; }
+};
+template<typename T>
+class Ptr
+{
+	T* pObj;
+public:
+	Ptr(T* p = 0) :pObj() {}
+	~Ptr() { delete pObj; }
+	T* operator->() { return pObj; }
+	T& operator*() { return *pObj; }
+};
+#include<memory>
+int main()
+{
+	std::shared_ptr<Car>p1(new Car);
+	p1->Go();
+	//Car a;
+	//Car* p1 = &a;
+	//p1->Go();
+	//(*p1).Go();
+	//a.Go();
+	//Ptr p = new Car;
+	//p->Go();	//p.operator->()Go()
+	//			//p.operator->()->Go();
+	//(*p).Go();
+}
+#endif
+#if 0
+class Plus
+{
+	int a;
+public:
+	int operator()(int a, int b)
+	{
+		return a + b;
+	}
+};
+int main()
+{
+	Plus p;
+	int p = p(1, 2);//p.operator()(1,2)
+}
+#endif
+#if 1
+//0~9 사이의 난수 발생 시키자 
+#include<iostream>
+#include<ctime>
+int frand()
+{
+	//static char history[10] = { 0, };
+	return rand()%10;
+}
+class URandom
+{
+	char history[10];
+public:
+	URandom()
+	{
+		for (int i = 0; i < 10; i++)
+		{
+			history[i] = 0;
+			srand(time(0));
+		}
+	}
+	int operator()()
+	{
+		int n = -1;
+		do {
+			n = rand() % 10;
+		} while (history[n] == 1);
+		history[n] = 1;
+		return n;
+	}
+};
+int main()
+{
+	URandom orand;
+	std::cout << orand() << std::endl;
+	std::cout << orand() << std::endl;
+	std::cout << orand() << std::endl;
+	std::cout << orand() << std::endl;
+	std::cout << orand() << std::endl;
+	std::cout << orand() << std::endl;
+	std::cout << orand() << std::endl;
+	std::cout << orand() << std::endl;
+	std::cout << orand() << std::endl;
+	std::cout << orand() << std::endl;
+	std::cout << frand() << std::endl;
+}
+#endif
+#if 0
+#include<iostream>
+#include<functional>
+int main()
+{
+	std::plus<double>p;
+	std::cout << p(3.4, 5.6) << std::endl;
+}
+#endif
+#if 0
+#include<iostream>
+#include<vector>
+#include<list>
+
+int main()
+{
+	int x[10] = { 1,2,3,4,5,6,7,8,9,10 };
+	int* p1 = x;
+	++p1;
+	*p1 = 20;
+//	std::vector<int>v = { 1,2,3,4,5,6,7,8,9,10 };
+	std::list<int> v = { 1,2,3,4,5,6,7,8,9,10 };
+	auto p2 = v.begin();
+	++p2;
+	*p2 = 30;
+	++p2;
+	std::cout << *p2 << std::endl;
+	for (auto n : v)
+		std::cout << n << ", " ;
+}
+#endif
+#if 0
+#include<iostream>
+#include<vector>
+#include<list>
+
+int main()
+{
+	int x[10] = { 1,2,3,4,5,6,7,8,9,10 };
+	std::list<int> v = { 1,2,3,4,5,6,7,8,9,10 };
+	auto p1 = std::begin(x);
+	auto p2 = std::end(x);
+	
+	while (p1 != p2)
+	{
+		std::cout << *p1 << std::endl;
+		++p1;
+	}
 }
 #endif
