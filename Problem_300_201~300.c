@@ -1333,6 +1333,100 @@ void main()
 		t3.tm_hour, t3.tm_min, t3.tm_sec);
 }
 #endif
-#if 1 //255 올해의 경과된 날짜 수 구하기(localtime)
+#if 0 //255 올해의 경과된 날짜 수 구하기(localtime)
+#include<stdio.h>
+#include<time.h>
 
+void main()
+{
+	time_t now;
+	struct tm t;
+
+	now = time(NULL);
+	localtime_s(&t, &now);
+
+	printf("올해의 경과일수 : %d\n", t.tm_yday);
+}
+#endif
+#if 0 //256 올해의 경과된 주의 수 구하기(strftime)
+#include<stdio.h>
+#include<time.h>
+
+void main()
+{
+	time_t now;
+	struct tm t;
+	char buff[100];
+
+	now = time(NULL);
+	localtime_s(&t, &now);
+	strftime(buff, sizeof(buff), "올해의 경과된 주:%U주", &t);
+	puts(buff);
+}
+#endif
+#if 0 //257 오늘의 요일 구하기
+#include<stdio.h>
+#include<time.h>
+
+void main()
+{
+	time_t now;
+	struct tm t;
+	char buff[100];
+
+	now = time(NULL);
+	localtime_s(&t, &now);
+	strftime(buff, sizeof(buff), "요일:%A", &t);
+	puts(buff);
+	strftime(buff, sizeof(buff), "요일:%a", &t);
+	puts(buff);
+	printf("%d\n", t.tm_wday);
+}
+#endif
+#if 0 //258 오전/오후 표시하기
+#include<stdio.h>
+#include<time.h>
+#include<string.h>
+
+void main()
+{
+	time_t now;
+	struct tm t;
+	char buff[100],AMPM[10];
+
+	now = time(NULL);
+	localtime_s(&t, &now);
+	strftime(buff, sizeof(buff), "%Y-%m-%d %H:%M:%S", &t);
+	strftime(AMPM, sizeof(AMPM), "%p", &t);
+	
+	if (strcmp(buff, "AM"))strcpy_s(AMPM,sizeof(AMPM), "오전");
+	else if (strcmp(buff, "PM"))strcpy_s(AMPM, sizeof(AMPM), "오후");
+	strcat_s(buff,sizeof(buff), AMPM);
+
+	puts(buff);
+}
+#endif
+#if 0 //259 AM/PM 표시하기
+#include<stdio.h>
+#include<time.h>
+#include<string.h>
+
+void main()
+{
+	time_t now;
+	struct tm t;
+	char buff[100], AMPM[10];
+
+	now = time(NULL);
+	localtime_s(&t, &now);
+	strftime(buff, sizeof(buff), "%Y-%m-%d %H:%M:%S", &t);
+	strftime(AMPM, sizeof(AMPM), "%p", &t);
+	puts(buff);
+
+	if (strcmp(buff, "오전"))strcpy_s(AMPM, sizeof(AMPM), "AM");
+	else if (strcmp(buff, "오후"))strcpy_s(AMPM, sizeof(AMPM), "PM");
+	strcat_s(buff, sizeof(buff), AMPM);
+
+	puts(buff);
+}
 #endif
