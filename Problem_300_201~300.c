@@ -1430,3 +1430,257 @@ void main()
 	puts(buff);
 }
 #endif
+#if 0 //260 문자열로 된 날짜를 time_t 형식으로 변환하기(atio, mktime)
+#include<stdio.h>
+#include<time.h>
+#include<stdlib.h>
+
+void main()
+{
+	char date[] = "2020-06-23";
+	time_t now;
+	struct tm t = { 0, };
+
+	t.tm_mday = atoi(&date[8]);
+	t.tm_mon = atoi(&date[5]) - 1;
+	t.tm_year = atoi(&date[0]) - 1900;
+
+	now = mktime(&t);
+	printf("2020-06-23을 time_t로 변환하면 %lld\n",now);
+}
+#endif
+#if 0 //261 문자열로 된 날짜를 struct tm 형식으로 변환하기
+#include<stdio.h>
+#include<time.h>
+#include<stdlib.h>
+
+void main()
+{
+	char date[] = "2020-06-23 02:09:21";
+	struct tm t = { 0, };
+
+	t.tm_sec = atoi(&date[17]);
+	t.tm_min = atoi(&date[14]);
+	t.tm_hour = atoi(&date[11]);
+	t.tm_mday = atoi(&date[8]);
+	t.tm_mon = atoi(&date[5]) - 1;
+	t.tm_year = atoi(&date[0]) - 1900;
+
+	mktime(&t);
+	printf("struct tm 변환 후 날짜: %4d-%02d-%02d %02d:%02d:%02d\n",
+		t.tm_year + 1900, t.tm_mon + 1, t.tm_mday,
+		t.tm_hour, t.tm_min, t.tm_sec);
+}
+#endif
+#if 0 //262 날짜 및 시간을 다양한 방법으로 출력하기(_ftime)
+#include<stdio.h>
+#include<time.h>
+#include<sys/timeb.h>
+#pragma warning(disable:4996)
+
+void main()
+{
+	struct _timeb tb;
+	struct tm t;
+	char buff[100];
+
+	_ftime(&tb);
+
+	localtime_s(&t, &tb.time);
+
+	printf("%4d-%d-%d %d:%d:%d.%d\n",
+		t.tm_year + 1900, t.tm_mon + 1, t.tm_mday,
+		t.tm_hour, t.tm_min, t.tm_sec, tb.millitm);
+
+	printf(ctime(&tb.time));
+	printf(asctime(&t));
+	puts(_strdate(buff));
+	puts(_strtime(buff));
+	strftime(buff, sizeof(buff), "%Y-%m-%d %H:%M:%S %p(%a)", &t);
+	puts(buff);
+	strftime(buff, sizeof(buff), "%#Y-%#m-%#d %#H:%#M:%#S %p(%a)", &t);
+	puts(buff);
+	strftime(buff, sizeof(buff), "%c", &t);
+	puts(buff);
+	strftime(buff, sizeof(buff), "%x %X", &t);
+	puts(buff);
+	strftime(buff, sizeof(buff), "%#c", &t);
+	puts(buff);
+	strftime(buff, sizeof(buff), "%#x", &t);
+	puts(buff);
+}
+#endif
+#if 0 //263 야구 게임 만들기
+#include<stdio.h>
+#include<time.h>
+#include<stdlib.h>
+#include<memory.h>
+#pragma warning(disable:4996)
+
+void main()
+{
+	int com[3] = { 0, };
+	int gamer[3] = { 0, };
+	int guess[10] = { 0, };
+	int count, i;
+	int strike, ball;
+	char yesno;
+
+	srand(time(NULL));
+
+	puts("야구 게임을 시작합니다.");
+
+	while (1)
+	{
+		com[0] = rand() % 10;
+		com[1] = rand() % 10;
+		com[2] = rand() % 10;
+		count = 1;
+
+		if (com[0] == com[1] || com[0] == com[2] || com[1] == com[2])continue;
+
+		puts("숫자0~9를 공백으로 분리하여 3개 입력하고 엔터키를 치세요!!");
+
+		memset(guess, 0, sizeof(guess));
+
+		while (1)
+		{
+			strike = 0; ball = 0;
+
+			for (i = 0; i < 10; i++)
+			{
+				printf("%d", guess[i]);
+			}
+			printf("\n개의 숫자[0~9]를 입력하세요:");
+
+			scanf("%d %d %d", &gamer[0], &gamer[1], &gamer[2]);
+
+			if (com[0] == gamer[0])strike++;
+			else if (com[0] == gamer[1] || com[0] == gamer[2])ball++;
+			
+			if (com[1] == gamer[1])strike++;
+			else if (com[1] == gamer[0] || com[1] == gamer[2])ball++;
+
+			if (com[2] == gamer[2])strike++;
+			else if (com[2] == gamer[0] || com[2] == gamer[1])ball++;
+
+			if (gamer[0] > 9 || gamer[1] > 9 || gamer[2] > 9)
+			{
+				puts("입력한 숫자가 너무 큽니다. 0~9를 입력하세요.");
+				continue;
+			}
+
+			guess[gamer[0]] = 1;
+			guess[gamer[1]] = 1;
+			guess[gamer[2]] = 1;
+
+			printf("\n[%2d회] %d 스트라이크 %d 볼 \n\n", count, strike, ball);
+			if (strike == 3)break;
+			count++;
+		}
+		fflush(stdin);
+
+		printf("게임을 계속하시겠습니까(y/n)?");
+		scanf("%c", &yesno);
+		if (yesno == 'N' || yesno == 'n')break;
+	}
+}
+#endif
+#if 0 //264 스택 구현하기
+#include<stdio.h>
+#include<string.h>
+#include<stdlib.h>
+#pragma warning(disable:4996)
+
+int push(int value);
+int pop(int* value);
+
+#define STACK_MAX 100
+
+typedef struct tagStack
+{
+	int array[STACK_MAX];
+	int top;
+	int bottom;
+}STACK;
+
+STACK s;
+
+void main()
+{
+	char buff[100], tmp[100];
+	char* op = "+-*/%";
+	int index;
+	int value1 = 0, value2 = 0;
+
+	s.top = STACK_MAX;
+
+	puts("계산식을 1*2처럼 입력하고 엔터키를 치세요.");
+	puts("아무것도 입력하지 않으면 계산이 종료됩니다.");
+
+	for (;;)
+	{
+		printf("계산식:");
+		gets(buff);
+
+		if (strlen(buff) == 0)break;
+
+		memset(tmp, 0, sizeof(tmp));
+
+		index = strcspn(buff, op);
+
+		memcpy(tmp, buff, index);
+
+		value1 = atoi(tmp);
+		value2 = atoi(&buff[index + 1]);
+
+		switch (buff[index])
+		{
+		case'+':value1 += value2; break;
+		case'-':value1 -= value2; break;
+		case'*':value1 *= value2; break;
+		case'/':value1 /= value2; break;
+		case'%':value1 %= value2; break;
+		default:
+			puts("잘못된 연산자를 사용하였습니다.");
+			continue;
+		}
+
+		if(push(value1) == -1)
+		{
+			puts("더 이상 저자할 수 없습니다.");
+		}
+		printf("%s=%d,s.top=%d\n\n", buff, value1, s.top);
+
+	}
+	value1 = 0;
+
+	for (;;)
+	{
+		if (pop(&value2) == -1)break;
+		value1 += value2;
+	}
+	printf("계산의 총합은 %d입니다.\n", value1);
+}
+int push(int value)
+{
+	if (s.top == 0)return -1;
+	s.array[--s.top] = value;
+	return 0;
+}
+
+int pop(int* value)
+{
+	if (s.top == STACK_MAX)return-1;
+	*value = s.array[s.top++];
+	return 0;
+}
+#endif
+#if 1 //265 큐 구현하기
+#include<stdio.h>
+#include<string.h>
+#include<stdlib.h>
+#pragma warning(disable:4996)
+
+
+#endif
