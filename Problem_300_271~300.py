@@ -78,12 +78,17 @@ if 0:  # 275 조건문 사용하기(if~else)
         print(y)
     z = x + y
 if 0:  # 276 순환문 사용하기(for, while)
+<<<<<<< HEAD
     for i in range(1, 5):
+=======
+    for i in range(1,5):
+>>>>>>> dda9b94d840b442f867e2eda046b8f5f3c5b9935
         print(i)
 
     for i in range(5):
         print(i)
 
+<<<<<<< HEAD
     for i in range(1, 10, 2):
         print(i)
 
@@ -97,26 +102,55 @@ if 0:  # 276 순환문 사용하기(for, while)
 if 0:  # 277 파이썬 문자열 사용하기
     Korea = "대한민국"
     IT = 'Google을 넘어 세계 강국으로'
+=======
+    for i in range(1,10,2):
+        print(i)
+
+    for i in range(9,0,-3):
+        print(i)
+
+    i=0
+    while i<10:
+        print(i)
+        i+=1
+if 1:  # 277 파이썬 문자열 사용하기
+    Korea="대하님ㄴ국"
+    IT='Google을 넘어 세계 강국으로'
+>>>>>>> dda9b94d840b442f867e2eda046b8f5f3c5b9935
 
     print(Korea)
     print(IT)
 
+<<<<<<< HEAD
     Korea = """아름다운
 우리나라
 대한민국"""
 
     IT = """Google을 넘어 
 세계 강국으로"""
+=======
+    Korea="""아름다운
+    우리나라
+    대한민국"""
+
+    IT="""Google을 넘어 
+    세계 강국으로"""
+>>>>>>> dda9b94d840b442f867e2eda046b8f5f3c5b9935
 
     print(Korea)
     print(IT)
 
+<<<<<<< HEAD
     string = "You call it love"
+=======
+    string="You call it love"
+>>>>>>> dda9b94d840b442f867e2eda046b8f5f3c5b9935
     print(string[0:3])
     print(string[:8])
     print(string[9:11])
     print(string[12:])
 
+<<<<<<< HEAD
     y = 2020
     m = 12
     d = 25
@@ -182,3 +216,18 @@ if 0:  # 279 튜플 사용하기
     print(Microsoft)
 if 1:  # 280 딕셔너리 사용하기
     sports = {}
+=======
+    y=2020
+    m=12
+    d=25
+    christmas="Christmas - {0}년도{1}월{2}일".format(y,m,d)
+    print(christmas)
+
+    stra="Korea"
+    strb="Japan"
+
+    if stra>strb:
+        print(stra)
+
+    print('www.example.com'.strip('cmowz'))
+>>>>>>> dda9b94d840b442f867e2eda046b8f5f3c5b9935

@@ -1615,7 +1615,7 @@ void main()
 
 	s.top = STACK_MAX;
 
-	puts("계산식을 1*2처럼 입력하고 엔터키를 치세요.");
+	puts("계산식을 1 * 2처럼 입력하고 엔터키를 치세요.");
 	puts("아무것도 입력하지 않으면 계산이 종료됩니다.");
 
 	for (;;)
@@ -1648,7 +1648,7 @@ void main()
 
 		if(push(value1) == -1)
 		{
-			puts("더 이상 저자할 수 없습니다.");
+			puts("더 이상 저장할 수 없습니다.");
 		}
 		printf("%s=%d,s.top=%d\n\n", buff, value1, s.top);
 
@@ -1676,11 +1676,888 @@ int pop(int* value)
 	return 0;
 }
 #endif
-#if 1 //265 큐 구현하기
+#if 0 //265 큐 구현하기
 #include<stdio.h>
 #include<string.h>
 #include<stdlib.h>
 #pragma warning(disable:4996)
 
+int add(int value);
+int delete(int* value);
 
+#define QUEUE_MAX 100
+
+typedef struct tagQueue
+{
+	int array[QUEUE_MAX];
+	int front;
+	int rear;
+}QUEUE;
+
+QUEUE q;
+
+void main()
+{
+	char buff[100], tmp[100];
+	char* op = "+-*/%";
+	int index;
+	int value1 = 0, value2 = 0;
+
+	q.front = q.rear = 0;
+
+	puts("계산식을 1 * 2처럼 입력하고 엔터키를 치세요.");
+	puts("아무것도 입력하지 않으면 계산이 종료됩니다.");
+
+	for (;;)
+	{
+		printf("계산식:");
+		gets(buff);
+
+		if (strlen(buff) == 0)break;
+
+		memset(tmp, 0, sizeof(tmp));
+
+		index = strcspn(buff, op);
+
+		memcpy(tmp, buff, index);
+
+		value1 = atoi(tmp);
+		value2 = atoi(&buff[index + 1]);
+
+		switch (buff[index])
+		{
+		case'+':value1 += value2; break;
+		case'-':value1 -= value2; break;
+		case'*':value1 *= value2; break;
+		case'/':value1 /= value2; break;
+		case'%':value1 %= value2; break;
+		default:
+			puts("잘못된 연산자를 사용하였습니다.");
+			continue;
+		}
+		if (add(value1) == -1)
+		{
+			puts("더 이상 추가할 수 없습니다.");
+		}
+		printf("%s=%d,q.rear = %d\n\n", buff, value1, q.rear);
+	}
+	value1 = 0;
+
+	for (;;)
+	{
+		if (delete(&value2) == -1)break;
+
+		value1 += value2;
+	}
+	printf("계산의 총합은 %d 입니다.\n", value1);
+
+}
+int add(int value)
+{
+	if (q.rear == QUEUE_MAX)return -1;
+	q.array[q.rear++] = value;
+	return 0;
+}
+int delete(int* value)
+{
+	if (q.front == q.rear || q.front == QUEUE_MAX)return -1;
+	*value = q.array[q.front++];
+	return 0;
+}
+#endif
+#if 0 //266 단일 링크드 리스트 구현하기
+#include<stdio.h>
+#include<string.h>
+#include<malloc.h>
+#pragma warning(disable:4996)
+
+int add_list(char* name, char* tel, char* addr);
+void print_list(void);
+void remove_list(void);
+
+typedef struct tagLinkedList
+{
+	char name[30];
+	char tal[30];
+	char addr[100];
+
+	struct tagLinkedList* next;
+}ADDR;
+
+ADDR* g_pAddrHead = NULL;
+
+void main()
+{
+	add_list("홍길동", "1111", "서울 종로구");
+	add_list("모모", "2222", "서울 강서구");
+	add_list("사나", "3333", "서울 구로구");
+	add_list("쯔위", "4444", "서울 강동");
+	add_list("나연", "5555", "대전 동구");
+
+	print_list();
+	remove_list();
+}
+
+int add_list(char* name, char* tel, char* addr)
+{
+	ADDR* plocal, * pn = g_pAddrHead;
+
+	if (g_pAddrHead == NULL)
+	{
+		g_pAddrHead = malloc(sizeof(ADDR));
+
+		if (g_pAddrHead == NULL)
+		{
+			return 0;
+		}
+		g_pAddrHead->next = NULL;
+		plocal = g_pAddrHead;
+	}
+	else
+	{
+		plocal = malloc(sizeof(ADDR));
+
+		if (plocal == NULL)
+		{
+			return 0;
+		}
+		while (pn->next)
+		{
+			pn = pn->next;
+		}
+		pn->next = plocal;
+		plocal->next = NULL;
+	}
+	strcpy(plocal->name, name);
+	strcpy(plocal->tal, tel);
+	strcpy(plocal->addr, addr);
+
+	return 1;
+}
+
+void print_list()
+{
+	int count = 1;
+	ADDR* plist;
+
+	plist = g_pAddrHead;
+
+	while (plist)
+	{
+		printf("No. %d\n", count++);
+		puts(plist->name);
+		puts(plist->tal);
+		printf("%s\n\n", plist->addr);
+
+		plist = plist->next;
+	}
+}
+
+void remove_list()
+{
+	ADDR* plocal;
+
+	while (g_pAddrHead)
+	{
+		plocal = g_pAddrHead->next;
+
+		free(g_pAddrHead);
+		g_pAddrHead = plocal;
+	}
+}
+#endif
+#if 0 //267 이중 링크드 리스트 구현하기
+#include<stdio.h>
+#include<malloc.h>
+#include<string.h>
+#pragma warning(disable:4996)
+
+int add_list(char* name, char* tel, char* addr);
+void print_list(void);
+void remove_list(void);
+
+typedef struct tagLinkedList
+{
+	char name[30];
+	char tel[30];
+	char addr[100];
+
+	struct tagLinkedList* prev;
+	struct tagLinkedList* next;
+}ADDR;
+
+ADDR* g_pAddrHead = NULL;
+
+void main(void)
+{
+	add_list("사나", "1111", "서울특별시 종로구");
+	add_list("미나", "2222", "서울특별시 강서구");
+	add_list("모모", "3333", "서울특별시 구로구");
+	add_list("쯔위", "4444", "서울특별시 강동구");
+	add_list("지효", "5555", "대전광역시 동구");
+
+	print_list();
+	remove_list();
+}
+int add_list(char* name, char* tel, char* addr)
+{
+	ADDR* plocal;
+
+	if (g_pAddrHead == NULL)
+	{
+		g_pAddrHead = malloc(sizeof(ADDR));
+
+		if (g_pAddrHead == NULL)
+		{
+			return 0;
+		}
+		g_pAddrHead->prev = NULL;
+		g_pAddrHead->next = NULL;
+	}
+	else
+	{
+		plocal = malloc(sizeof(ADDR));
+
+		if (plocal == NULL)
+		{
+			return 0;
+		}
+		g_pAddrHead->next = plocal;
+		plocal->prev = g_pAddrHead;
+		g_pAddrHead = plocal;
+		g_pAddrHead->next = NULL;
+	}
+
+	strcpy(g_pAddrHead->name, name);
+	strcpy(g_pAddrHead->tel, tel);
+	strcpy(g_pAddrHead->addr, addr);
+
+	return 1;
+}
+
+void print_list(void)
+{
+	int count = 1;
+	ADDR* plocal;
+
+	plocal = g_pAddrHead;
+	while (plocal->prev	)
+	{	
+		plocal = plocal->prev;
+	}
+	while (plocal)
+	{
+		printf("No.%d\n", count++);
+		puts(plocal->name);
+		puts(plocal->tel);
+		printf("%s \n\n", plocal->addr);
+		
+		plocal = plocal->next;
+	}
+}
+
+void remove_list()
+{
+	ADDR* plocal;
+
+	while (g_pAddrHead->prev)
+	{
+		g_pAddrHead = g_pAddrHead->prev;
+	}
+
+	while (g_pAddrHead)
+	{
+		plocal = g_pAddrHead->next;
+
+		free(g_pAddrHead);
+		g_pAddrHead = plocal;
+	}
+	g_pAddrHead = NULL;
+}
+#endif
+#if 1 //268 주소록 구현하기
+#include<stdio.h>
+#include<malloc.h>
+#include<string.h>
+#include<conio.h>
+#pragma warning(disable:4996)
+
+#define ADDRFILE "D:\\C_code\\addrlist.txt"
+
+typedef struct tagLinkedList
+{
+	char name[30];
+	char tel[30];
+	char addr[100];
+
+	struct tagLinkedList* prev;
+	struct tagLinkedList* next;
+}ADDR;
+
+ADDR* g_pAddrHead = NULL;
+ADDR* g_pFind;
+int g_bSaved = 1;
+
+void get_addrlist();
+int add_list(const ADDR* addr);
+int find_list(const char* name);
+void SetHeadPosition();
+void SetTailPosition();
+
+void Add_addr();
+void Find_addr();
+void Modify_addr();
+void Delete_addr();
+void Print_addr();
+void Save_addr();
+void Remove_addr();
+
+void main()
+{
+	int ch;
+
+	get_addrlist();
+
+	puts("주소록 프로그램 Version 1.0");
+
+	while (1)
+	{
+		printf("\n[1]등록 [2]검색 [3]수정 [4]삭제 [5]출력 [S]저장 [Q]종료");
+
+		ch = getch();
+
+		switch (ch)
+		{
+		case '1':Add_addr(); break;
+		case '2':Find_addr(); break;
+		case '3':Modify_addr(); break;
+		case '4':Delete_addr(); break;
+		case '5':Print_addr(); break;
+		case 's':
+		case 'S':Save_addr(); break;
+		case 'q':
+		case 'Q':
+			if (g_bSaved == 0)
+			{
+				printf("\n\n변경된 주소 데이터를 저장하시겠습니까(y/n)?");
+				ch = getchar();
+				if (ch == 'Y' || ch == 'y')Save_addr();
+			}
+			
+			Remove_addr(); return;
+		default:printf("\n\n1~5 또는 S/Q를 누르십시오.\n\n"); break;
+		}
+	}
+}
+void get_addrlist()
+{
+	ADDR addr;
+	FILE* fp;
+
+	fopen_s(&fp, ADDRFILE, "rb");
+
+	if (fp == NULL)
+	{
+		perror("파일 개방 에러");
+		return;
+	}
+
+	while (!feof(fp))
+	{
+		fread(&addr, sizeof(ADDR), 1, fp);
+
+		if (ferror(fp))
+		{
+			fclose(fp);
+			perror("파일 읽기 에러");
+			return;
+		}
+		
+		if (feof(fp))break;
+
+		if (add_list(&addr) == 0)
+		{
+			printf("주소 데이처를 링크드 리스트에 추가할 수 없습니다.\n");
+		}
+	}
+	fclose(fp);
+}
+
+int add_list(const ADDR* addr)
+{
+	ADDR* plocal=0, * pn = g_pAddrHead;
+	SetHeadPosition();
+
+	if (g_pAddrHead == NULL)
+	{
+		plocal = malloc(sizeof(ADDR));
+		memset(plocal, 0, sizeof(ADDR));
+
+		if (plocal == NULL)
+		{
+			return 0;
+		}
+
+		while (pn->next)
+		{
+			pn = pn->next;
+		}
+		pn->next = plocal;
+		plocal->prev = pn;
+		plocal->next = NULL;
+	}
+
+	strcpy(plocal->name, addr->name);
+	strcpy(plocal->tel, addr->tel);
+	strcpy(plocal->addr, addr->addr);
+
+	return 1;
+}
+
+void SetHeadPosition()
+{
+	if (g_pAddrHead == NULL)return;
+
+	while (g_pAddrHead->prev)
+	{
+		g_pAddrHead = g_pAddrHead->prev;
+	}
+}
+
+void SetTailPosition()
+{
+	if (g_pAddrHead == NULL)return;
+
+	while (g_pAddrHead->next)
+	{
+		g_pAddrHead = g_pAddrHead->next;
+	}
+}
+
+int find_list(const char* name)
+{
+	ADDR* plocal;
+
+	SetHeadPosition();
+
+	plocal = g_pAddrHead;
+
+	while (plocal)
+	{
+		if (strstr(plocal->name, name))
+		{
+			g_pFind = plocal;
+			return 1;
+		}
+		plocal = plocal->next;
+	}
+	return 0;
+}
+
+void Add_addr()
+{
+	ADDR addr;
+
+	memset(&addr, 0, sizeof(ADDR));
+
+	printf("\n\n 등록할 이름:"); gets(addr.name);
+
+	if (strlen(addr.name) == 0)return;
+
+	printf("등록할 전화:"); gets(addr.tel);
+	printf("등록할 주소:"); gets(addr.addr);
+
+	if (find_list(addr.name) == 1)
+	{
+		printf("\n이미 등록되어 있는 이름입니다.\n\n");
+		puts(g_pFind->name);
+		puts(g_pFind->tel);
+		puts(g_pFind->addr);
+		return;
+	}
+
+	if (add_list(&addr))
+	{
+		g_bSaved = 0;
+		printf("\n등록되었습니다.\n\n");
+
+	}
+	else
+	{
+		printf("\n등록이 실패되었습니다.\n\n");
+	}
+}
+
+
+void Find_addr()
+{
+	char buff[100] = { 0, };
+	ADDR* plocal;
+	printf("\n\n검색할 이름/전화/주소의 일부를 입력하세요.\n");
+	printf("이름/전화/주소:"); gets(buff);
+
+	if (strlen(buff) == 0)return;
+
+	SetHeadPosition();
+
+	plocal = g_pAddrHead;
+	g_pFind = NULL;
+
+	while (plocal)
+	{
+		if (strstr(plocal->name, buff))
+		{
+			g_pFind = plocal;
+			break;
+		}
+
+		if (strstr(plocal->tel, buff))
+		{
+			g_pFind = plocal;
+			break;
+		}
+
+		if (strstr(plocal->addr, buff))
+		{
+			g_pFind = plocal;
+			break;
+		}
+		plocal = plocal->next;
+	}
+
+	if (g_pFind)
+	{
+		puts(g_pFind->name);
+		puts(g_pFind->tel);
+		puts(g_pFind->addr);
+	}
+	else
+	{
+		printf("\n\n%s을 주소록에서 찾을 수 없습니다.\n\n", buff);
+	}
+}
+
+void Modify_addr()
+{
+	char name[100] = { 0, };
+	ADDR addr;
+
+	while (1)
+	{
+		printf("\n\n수정할 이름:"); gets(name);
+
+		if (strlen(name) == 0)return;
+
+		if (find_list(name) == 0)
+		{
+			puts("수정할 이름을 찾을 수 없습니다.");
+			continue;
+		}
+		break;
+	}
+
+	printf("\n%s에 대한 주소 데이터는 아래와 같습니다.\n\n", name);
+	puts(g_pFind->name);
+	puts(g_pFind->tel);
+	puts(g_pFind->addr);
+
+	printf("\n 수정하려는 이름/전화주소를 입력한 후 엔터키를 치세요.\n\n");
+
+	printf("이름:"); gets(addr.name);
+	printf("전화:"); gets(addr.tel);
+	printf("주소:"); gets(addr.addr);
+	if (strlen(addr.name) == 0) strcpy(addr.name, name);
+
+	strcpy(g_pFind->name, addr.name);
+	strcpy(g_pFind->tel, addr.tel);
+	strcpy(g_pFind->addr, addr.addr);
+
+	g_bSaved = 0;
+
+	printf("%s에 대한 주소 데이터를 수정하였습니다.\n", name);
+}
+
+void Delete_addr()
+{
+	char name[100] = { 0, };
+	ADDR* plocal;
+	int ch;
+
+	while (1)
+	{
+		printf("\n\n삭제할 이름:"); gets(name);
+
+		if (strlen(name) == 0)return;
+
+		if (find_list(name) == 0)
+		{
+			puts("삭제할 이름을 찾을 수 없습니다.");
+			continue;
+		}
+		break;
+	}
+
+	puts(g_pFind->name);
+	puts(g_pFind->tel);
+	puts(g_pFind->addr);
+
+	printf("%s을 삭제하시겠습니까(y/n)?", name);
+	ch = getch();
+	fflush(stdin);
+
+	if (ch == 'Y' || ch == 'y')
+	{
+		if (g_pFind->prev == NULL)
+		{
+			if (g_pFind->next == NULL)
+			{
+				free(g_pFind);
+				g_pAddrHead = NULL;
+			}
+			else
+			{
+				plocal = g_pFind->next;
+				free(g_pFind);
+				plocal->prev = NULL;
+				g_pAddrHead = plocal;
+			}
+		}
+		else if (g_pFind->next == NULL)
+		{
+			plocal = g_pFind->prev;
+			free(g_pFind);
+			plocal->next = NULL;
+			g_pAddrHead = plocal;
+		}
+		else
+		{
+			plocal = g_pFind->prev;
+			plocal->next = g_pFind->next;
+
+			plocal = g_pFind->next;
+			plocal->prev = g_pFind->prev;
+
+			free(g_pFind);
+			g_pAddrHead = plocal;
+		}
+
+		g_bSaved = 0;
+
+		printf("\n\n검색된 줏고 데이터를 삭제하였습니다.\n\n");
+	}
+}
+
+
+void Print_addr()
+{
+	int count = 1;
+	ADDR* plocal;
+
+	SetHeadPosition();
+
+	plocal = g_pAddrHead;
+
+	while (plocal->prev)
+	{
+		plocal = plocal->prev;
+	}
+	printf("\n\n");
+
+	while (plocal)
+	{
+		printf("번호.%d\n", count++);
+		puts(plocal->name);
+		puts(plocal->tel);
+		printf("%s \n\n", plocal->addr);
+
+		printf("아무키나 누르세요,(중기:q)\n\n");
+		if (getch() == 'q')return;
+
+		plocal = plocal->next;
+	}
+}
+
+void Save_addr()
+{
+	ADDR* plocal;
+	FILE* fp;
+
+	if (g_pAddrHead == NULL)return;
+
+	fopen_s(&fp, ADDRFILE, "w+b");
+
+	if (fp == NULL)
+	{
+		perror("파일 개방 에러");
+		return;
+	}
+	SetHeadPosition();
+
+	while (g_pAddrHead)
+	{
+		plocal = g_pAddrHead->next;
+
+		fwrite(g_pAddrHead, sizeof(ADDR), 1, fp);
+
+		g_pAddrHead = plocal;
+	}
+	printf("\n모든 데이터를 파일에 저장하였습니다.");
+	g_bSaved = 1;
+
+	fclose(fp);
+}
+
+void Remove_addr()
+{
+	ADDR* plocal;
+
+	if (g_pAddrHead == NULL)return;
+
+	SetHeadPosition();
+
+	while (g_pAddrHead)
+	{
+		plocal = g_pAddrHead->next;
+
+		free(g_pAddrHead);
+
+		g_pAddrHead = plocal;
+	}
+	g_pAddrHead = NULL;
+}
+#endif
+#if 0 //269 TCP/IP 이해하기
+#define _WINSOCK_DEPRECATED_NO_WARNINGS
+#include<stdio.h>
+#include<WinSock2.h>
+#pragma comment(lib,"wsock32.lib")
+
+void main()
+{
+	SOCKET s;
+	WSADATA wsaData;
+	SOCKADDR_IN sin;
+
+	if (WSAStartup(WINSOCK_VERSION, &wsaData) != 0)
+	{
+		printf("WSAStartup 실패, 에러코드=%d\n", WSAGetLastError());
+		return;
+	}
+
+	s = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+
+	if (s == INVALID_SOCKET)
+	{
+		printf("소켓 생성 실패, 에러코드:%d\n", WSAGetLastError());
+		WSACleanup();
+		return;
+	}
+	
+	sin.sin_family = AF_INET;
+	sin.sin_addr.s_addr = inet_addr("127.0.0.1");
+	sin.sin_port = htons(21);
+
+	if (connect(s, (struct sockaddr*)&sin, sizeof(sin)) != 0)
+	{
+		printf("접속실패,에러코드=%u\n", WSAGetLastError());
+		closesocket(s);
+		WSACleanup();
+		return;
+	}
+
+	if (closesocket(s) != 0)
+	{
+		printf("소켓 제거 실패,에러코드=%u\n", WSAGetLastError());
+		return;
+	}
+
+	puts("127.0.0.1의 21번 포트에 접속을 성공하였습니다.");
+}
+#endif
+#if 0 //270 TCP/IP 서버/클라이언트 프로그램 만들기
+#define _WINSOCK_DEPRECATED_NO_WARNINGS
+#include<stdio.h>
+#include<WinSock2.h>
+#pragma comment(lib,"wsock32.lib")
+
+void main()
+{
+	SOCKET s, cs;
+	WSADATA wsaData;
+
+	struct sockaddr_in sin, cli_addr;
+	int size = sizeof(cli_addr);
+	char data[10] = { 0, };
+
+	if (WSAStartup(WINSOCK_VERSION, &wsaData) != 0)
+	{
+		printf("WSAStartup 실패,에러코드=%d\n", WSAGetLastError());
+		return;
+	}
+
+	s = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+
+	if (s == INVALID_SOCKET)
+	{
+		printf("소켓 생성 실패, 에러코드:%d\n", WSAGetLastError());
+		WSACleanup();
+		return;
+	}
+
+	sin.sin_family = AF_INET;
+	sin.sin_port = htons(10000);
+	sin.sin_addr.s_addr = htonl(ADDR_ANY);
+
+	if (bind(s, (struct sockaddr*) & sin, sizeof(sin)) == SOCKET_ERROR)
+	{
+		printf("바인드 실패,에러코드=%d\n", WSAGetLastError());
+		closesocket(s);
+		WSACleanup();
+		return;
+	}
+
+	if (listen(s, SOMAXCONN) != 0)
+	{
+		printf("리슨 모드 설정 실패,에러코드=%d\n", WSAGetLastError());
+		closesocket(s);
+		WSACleanup();
+		return;
+	}
+
+	printf("클라이언트로부터 접속을 기다리고 있습니다...\n");
+
+	cs = accept(s, (struct sockaddr*) & cli_addr, &size);
+
+	if (cs == INVALID_SOCKET)
+	{
+		printf("접속 승인 실패,에러코드=%d\n", WSAGetLastError());
+		closesocket(s);
+		WSACleanup();
+		return;
+	}
+
+	puts("클라이언트와 연결되었습니다.");
+
+	if (recv(cs, data, 3, 0) < 3)
+	{
+		printf("데이터 수신 실패,에러 코드=%u\n", WSAGetLastError());
+		closesocket(cs); closesocket(s);
+		WSACleanup();
+		return;
+	}
+	printf("%s가 클라이언트로부터 수신되었습니다.\n", data);
+
+	if (closesocket(cs) != 0 || closesocket(s) != 0)
+	{
+		printf("소켓 제거 실패, 에러코드=%u\n", WSAGetLastError());
+		WSACleanup();
+		return;
+	}
+
+	if (WSACleanup() != 0)
+	{
+		printf("WSACleanup 실패,에러코드=%u\n", WSAGetLastError());
+		return;
+	}
+}
 #endif
