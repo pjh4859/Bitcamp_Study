@@ -1,39 +1,26 @@
-#if 0
+#if 1
 #include"videoshop.h"
 //비디오를 등록
-//문자열을 int 타입으로 변환합니다.
-int Video::number(char* buf) {
+Video* vHead;
+Customer* cHead;
+int Video::number(char* buf)
+{
 	int i = 0;
 	int id = 0;
-	while (buf[i]) {
-		if (!(buf[i] >= '0' && buf[i] <= '9'))
+	while (buf[i]) //buf 가 0이 나올 때까지 돈다
+	{
+		if (!(buf[i] >= '0' && buf[i] <= '9'))//buf[i]가 0~9 가 아니면 break
 			break;
 		i++;
 	}
-	if (i > 0 && (i == strlen(buf))) {
+	if (i > 0 && (i == strlen(buf)))
+	{
 		id = atoi(buf);
 		return id;
 	}
 	else
 		return -1;
 }
-//문자열을 int 타입으로 변환합니다.
-int Customer::number(char* buf) {
-	int i = 0;
-	int id = 0;
-	while (buf[i]) {
-		if (!(buf[i] >= '0' && buf[i] <= '9'))
-			break;
-		i++;
-	}
-	if (i > 0 && (i == strlen(buf))) {
-		id = atoi(buf);
-		return id;
-	}
-	else
-		return -1;
-}
-
 Video* Video::registerVideo()
 {
 	int id = 1;
@@ -49,20 +36,15 @@ Video* Video::registerVideo()
 			id = tmp->id + 1;
 		}
 	}
-
 	val = new Video;
-	//val = (Video*)malloc(sizeof(Video));
 	val->id = id;
-
 	val->lended = 0;
-	val->debtor_name = new (char[50]);
-	//val->debtor_name = (char*)malloc(sizeof(char) * 50);
+	val->debtor_name = new char[50];
 	strcpy(val->debtor_name, "");
 	val->next = NULL;
 
 	printf("비디오 제목을 입력해주세요 \n>>");
-	val->name = new (char[50]);
-	//val->name = (char*)malloc(sizeof(char) * 50);
+	val->name = new char[50];
 	do {
 		fgets(val->name, 20, stdin);
 
@@ -75,6 +57,7 @@ Video* Video::registerVideo()
 
 	if (vHead == NULL) {
 		vHead = val;
+		cout << "registerVideo2" << endl;
 		return val;
 	}
 	else {
@@ -85,9 +68,9 @@ Video* Video::registerVideo()
 		}
 		tmp->next = val;
 	}
+	cout << "registerVideo3" << endl;
 	return val;
 }
-
 //비디오 목록을 출력합니다
 void Video::listVideo() 
 {
@@ -113,6 +96,7 @@ void Video::listVideo()
 		printf("%s\n", str);
 		tmp = tmp->next;
 	}
+	cout << "listVideo" << endl;
 }
 //비디오를 검색합니다.(일련번호로..)
 Video* Video::findVideo(int id) 
@@ -126,6 +110,8 @@ Video* Video::findVideo(int id)
 		tmp = tmp->next;
 	}
 	return NULL;
+	cout << "findVideo" << endl;
+	return 0;
 }
 // 비디오를 삭제합니다
 void Video::removeVideo(int id) 
@@ -156,31 +142,32 @@ void Video::removeVideo(int id)
 		return;
 	}
 	printf("입력한 비디오는 존재하지 않습니다.\n");
+	cout << "removeVideo" << endl;
 }
-
 // 비디오를 모두 삭제합니다
-void Video::removeAllVideo() 
+Video::~Video() 
 {
+	cout << "~video" << endl;
 	Video* tmp;
 	Video* next;
 	tmp = vHead;
-	//데이터가 일치하는 노드를 찾거나, 노드의 끝에 도달하면 while문을 벗어남
-	while (tmp != NULL) {
+	while (tmp != NULL)
+	{
 		next = tmp->next;
-		//찾은노드의 메모리를 해제
-		free(tmp->name);
-		free(tmp->debtor_name);
-		free(tmp);
+		delete(tmp->name);
+		delete(tmp->debtor_name);
+		delete(tmp);
 
 		tmp = next;
 	}
+	cout << "removeAllVideo" << endl;
 }
-
 // 비디오를 대여합니다.
 void Video::lendVideo(int vid) 
 {
 	char buf[100];
 	Customer* person = NULL;
+	
 	int id = 0;
 	//비디오 검색
 	Video* tmp = findVideo(vid);
@@ -201,12 +188,12 @@ void Video::lendVideo(int vid)
 		*(buf + (strlen(buf) - 1)) = '\0';
 
 	//입력된문자열을 숫자로 변환
-	id = vHead->number(buf);
+	id = number(buf);
 	if (id != -1) {
 		//회원검색		
-		person = person->findCustomer(id);
+		person = cHead->findCustomer(id);
 		if (person)
-			person->showCustomerInfo(person);
+			cHead->showCustomerInfo(person);
 		if (!person) {
 			printf("존재하지 않는 회원입니다.\n");
 			return;
@@ -226,8 +213,8 @@ void Video::lendVideo(int vid)
 	tmp->lended = TRUE;
 	strcpy(tmp->debtor_name, buf);
 	printf("정상적으로 처리되었습니다..\n");
+	cout << "lendVideo" << endl;
 }
-
 //비디오를 반납합니다.
 void Video::restoreVideo()
 {
@@ -239,7 +226,7 @@ void Video::restoreVideo()
 	int id = 0;
 
 	//회원목록 출력
-	person->listCustomer();
+	cHead->listCustomer();
 	printf("비디오를 반납할 회원 번호를 입력해주세요.\n>>");
 	fgets(buf, 20, stdin);
 	//개행문자를 널문자로 대체함
@@ -247,12 +234,12 @@ void Video::restoreVideo()
 		*(buf + (strlen(buf) - 1)) = '\0';
 
 	//입력된문자열을 숫자로 변환
-	id = vHead->number(buf);
+	id = number(buf);
 	if (id != -1) {
 		//회원검색		
-		person = person->findCustomer(id);
+		person = cHead->findCustomer(id);
 		if (person)
-			person->showCustomerInfo(person);
+			cHead->showCustomerInfo(person);
 		if (!person) {
 			printf("존재하지 않는 회원입니다.\n");
 			return;
@@ -279,6 +266,7 @@ void Video::restoreVideo()
 	}
 	//입력버퍼에 남아있는 데이터를 비웁니다.
 	fflush(stdin);
+	cout << "restoreVideo" << endl;
 }
 // 신규 회원을 등록합니다.
 void Customer::registerCustomer()
@@ -297,20 +285,19 @@ void Customer::registerCustomer()
 		}
 	}
 	val = new Customer;
-	//val = (CUSTOMER*)malloc(sizeof(CUSTOMER));
 	val->id = id;
 	val->ncount = 0;
 	val->next = NULL;
 
 	printf("이름을 입력해주세요 \n>>");
-	val->name = (char*)malloc(sizeof(char) * 20);
+	val->name = new char[20];
 	fgets(val->name, 20, stdin);
 	//개행문자를 널문자로 대체함
 	if (*(val->name + (strlen(val->name) - 1)) == '\n')
 		*(val->name + (strlen(val->name) - 1)) = '\0';
 
 	printf("주소를 입력해주세요 \n");
-	val->addr = (char*)malloc(sizeof(char) * 20);
+	val->addr = new char[20];
 	fgets(val->addr, 20, stdin);
 	//개행문자를 널문자로 대체함
 	if (*(val->addr + (strlen(val->addr) - 1)) == '\n')
@@ -328,10 +315,11 @@ void Customer::registerCustomer()
 		}
 		tmp->next = val;
 	}
+	cout << "registerCustomer" << endl;
 }
-
 //회원 목록을 출력합니다
-void Customer::listCustomer() {
+void Customer::listCustomer() 
+{
 	Customer* tmp = NULL;
 	Customer* val = NULL;
 	char str[100];
@@ -345,10 +333,11 @@ void Customer::listCustomer() {
 		printf("%s\n", str);
 		tmp = tmp->next;
 	}
+	cout << "listCustomer" << endl;
 }
-
 //회원을 검색합니다.(이름으로 검색..)
-Customer* Customer::findCustomer(int id) {
+Customer* Customer::findCustomer(int id)
+{
 	Customer* tmp = NULL;
 	tmp = cHead;
 
@@ -358,10 +347,12 @@ Customer* Customer::findCustomer(int id) {
 		tmp = tmp->next;
 	}
 	return NULL;
+	cout << "fineCustomer" << endl;
+	return 0;
 }
-
 //해당 회원의 정보를 화면에 출력합니다.
-void Customer::showCustomerInfo(Customer* person) {
+void Customer::showCustomerInfo(Customer* person) 
+{
 	Video* tmp = NULL;
 	Video* val = NULL;
 	int i = 0;
@@ -383,6 +374,7 @@ void Customer::showCustomerInfo(Customer* person) {
 		}
 	}
 	printf("------------------------\n");
+	cout << "showCustomerInfo" << endl;
 }
 //회원을 삭제합니다.
 void Customer::removeCustomer(int id)
@@ -410,7 +402,7 @@ void Customer::removeCustomer(int id)
 
 		//가지고 있는 비디오의 대여정보를 초기화
 		for (i = 0; i < tmp->ncount; i++) {
-			vid = vid->findVideo(tmp->lendlist[i]);
+			vid = vHead->findVideo(tmp->lendlist[i]);
 			if (vid != NULL) {
 				vid->lended = FALSE;
 				strcpy(vid->debtor_name, "");
@@ -425,22 +417,25 @@ void Customer::removeCustomer(int id)
 		return;
 	}
 	printf("입력한 회원번호 존재하지 않습니다.\n");
+	cout << "removeCustomer" << endl;
 }
-
 // 회원를 모두 삭제합니다
-void Customer::removeAllCustomer() {
-	Customer* tmp = NULL;
+Customer::~Customer() 
+{
+	cout << "~Customer" << endl;
+	Customer* tmp;
 	Customer* next;
 	tmp = cHead;
 	//데이터가 일치하는 노드를 찾거나, 노드의 끝에 도달하면 while문을 벗어남
 	while (tmp != NULL) {
 		next = tmp->next;
 		//찾은노드의 메모리를 해제
-		free(tmp->name);
-		free(tmp->addr);
-		free(tmp);
+		delete(tmp->name);
+		delete(tmp->addr);
+		delete(tmp);
 
 		tmp = next;
 	}
+	cout << "removeAllCustomer" << endl;
 }
 #endif

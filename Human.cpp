@@ -1,4 +1,4 @@
-#if 0 //022 惑加.
+#if 1 //022 惑加.
 //备己 human.h, Human.cpp, ComputerEngineer.h, ComputerEngineer.cpp
 
 #include <iostream>

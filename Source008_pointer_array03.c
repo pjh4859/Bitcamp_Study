@@ -276,7 +276,7 @@ int main(void)
 #endif
 
 
-#if 1
+#if 0
 struct S1
 {
 	char* s;
