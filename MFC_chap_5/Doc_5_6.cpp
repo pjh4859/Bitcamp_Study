@@ -1,3 +1,4 @@
+#if 0
 #include "KView.h"
 #include "KDocument.h"
 #include <iostream>
@@ -42,3 +43,4 @@ void KView::Draw()
 		++iStart;
 	}
 }
+#endif
